@@ -1,0 +1,181 @@
+<div class="container">
+
+
+<div class="header">
+
+
+<div>
+
+<h1>
+<i class="bi bi-folder"></i>
+Projets
+</h1>
+
+
+<p>
+Gestion et suivi des projets
+</p>
+
+</div>
+
+
+
+<button 
+routerLink="/projects/create"
+class="btn-add">
+
+<i class="bi bi-plus-circle"></i>
+
+Nouveau projet
+
+</button>
+
+
+</div>
+
+
+
+
+
+<div class="project-grid">
+
+
+
+<div class="project-card"
+*ngFor="let project of projects">
+
+
+
+<div class="card-header">
+
+
+<h2>
+{{project.name}}
+</h2>
+
+
+<span 
+class="status"
+[class.done]="project.status==='TERMINE'"
+[class.progress]="project.status==='EN_COURS'">
+
+{{project.status}}
+
+</span>
+
+
+</div>
+
+
+
+
+
+<p class="description">
+
+{{project.description}}
+
+</p>
+
+
+
+
+<div class="info">
+
+
+<p>
+
+<i class="bi bi-person"></i>
+
+Chef projet :
+
+<strong>
+{{project.manager}}
+</strong>
+
+</p>
+
+
+
+<p>
+
+<i class="bi bi-calendar"></i>
+
+{{project.startDate}}
+-
+{{project.endDate}}
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+<div class="progress-box">
+
+
+<div class="progress-bar">
+
+
+<div 
+class="progress-value"
+[style.width.%]="project.progress">
+
+</div>
+
+
+</div>
+
+
+<span>
+{{project.progress}} %
+</span>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="actions">
+
+
+<button class="btn-edit">
+
+<i class="bi bi-pencil"></i>
+
+</button>
+
+
+<button class="btn-delete">
+
+<i class="bi bi-trash"></i>
+
+</button>
+
+
+<button class="btn-view">
+
+<i class="bi bi-eye"></i>
+
+</button>
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+</div>

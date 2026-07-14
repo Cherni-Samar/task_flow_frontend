@@ -1,0 +1,48 @@
+.sidebar{
+
+    width:240px;
+
+    height:100vh;
+
+    background:#1f2937;
+
+    padding-top:20px;
+
+}
+
+
+
+.menu a{
+
+    display:block;
+
+    color:white;
+
+    padding:15px 20px;
+
+    text-decoration:none;
+
+}
+
+
+
+.menu a:hover{
+
+    background:#374151;
+
+}
+
+
+
+.active{
+
+    background:#2563eb;
+
+}
+
+
+i{
+
+    margin-right:10px;
+
+}

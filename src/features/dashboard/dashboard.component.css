@@ -1,0 +1,226 @@
+.dashboard-container {
+
+    padding:25px;
+
+}
+
+
+
+h1 {
+
+    font-size:28px;
+
+    font-weight:700;
+    color:#374151;
+
+}
+
+
+
+.subtitle {
+
+    color:#6b7280;
+
+}
+
+
+
+
+
+/* Cards statistiques */
+
+.stats-grid {
+
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:20px;
+
+    margin-top:25px;
+
+}
+
+
+
+.stat-card {
+
+
+    padding:20px;
+
+    border-radius:15px;
+
+    color:white;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+
+}
+
+
+
+.stat-card h3 {
+
+    font-size:32px;
+
+    margin:0;
+
+}
+
+
+
+.stat-card i {
+
+    font-size:45px;
+
+}
+
+
+
+
+
+.blue {
+
+    background:#2563eb;
+
+}
+
+
+
+.green {
+
+    background:#059669;
+
+}
+
+
+
+.success {
+
+    background:#16a34a;
+
+}
+
+
+
+.danger {
+
+    background:#dc2626;
+
+}
+
+
+
+
+
+
+
+/* Partie basse */
+
+.content-grid {
+
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:25px;
+
+    margin-top:30px;
+
+
+}
+
+
+
+.card {
+
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:15px;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.1);
+    color:#374151;
+}
+
+
+
+.card h2 {
+
+    font-size:20px;
+
+    margin-bottom:20px;
+
+}
+
+
+
+
+
+
+.status-item {
+
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:15px;
+
+    background:#f3f4f6;
+
+    border-radius:10px;
+
+    margin-bottom:10px;
+
+
+}
+
+
+
+
+
+
+.collaborator {
+
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:15px 0;
+
+    border-bottom:1px solid #eee;
+
+
+}
+
+
+
+.collaborator i {
+
+    margin-right:10px;
+
+    font-size:20px;
+
+}
+
+
+
+.collaborator span {
+
+
+    color:#2563eb;
+
+    font-weight:600;
+
+}

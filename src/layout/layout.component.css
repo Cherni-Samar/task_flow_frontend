@@ -1,0 +1,18 @@
+.content{
+
+    display:flex;
+
+}
+
+
+main{
+
+    flex:1;
+
+    padding:20px;
+
+    background:#f8f9fa;
+
+    min-height:calc(100vh - 60px);
+
+}
