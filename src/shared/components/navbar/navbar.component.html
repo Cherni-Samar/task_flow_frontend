@@ -1,40 +1,43 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4">
+<nav class="navbar">
+
+  <!-- Logo -->
+  <div class="logo">
+    <i class="bi bi-kanban-fill"></i>
+    <span>TaskFlow</span>
+  </div>
 
 
-    <a class="navbar-brand fw-bold"
-       routerLink="/dashboard">
+  <!-- Right section -->
+  <div class="user-section">
 
-        <i class="bi bi-kanban"></i>
-        TaskFlow
+    <div class="user-info">
 
-    </a>
+      <i class="bi bi-person-circle"></i>
 
-
-
-    <div class="ms-auto d-flex align-items-center">
-
-
-        <span class="text-white me-3">
-
-            <i class="bi bi-person-circle"></i>
-
-            Admin
-
+      <div>
+        <span class="username">
+          Admin
         </span>
 
-
-
-        <button class="btn btn-light btn-sm"
-                (click)="logout()">
-
-            <i class="bi bi-box-arrow-right"></i>
-
-            Déconnexion
-
-        </button>
-
+        <small>
+          Administrateur
+        </small>
+      </div>
 
     </div>
+
+
+    <button class="logout-btn"
+            (click)="logout()">
+
+      <i class="bi bi-box-arrow-right"></i>
+
+      Déconnexion
+
+    </button>
+
+
+  </div>
 
 
 </nav>

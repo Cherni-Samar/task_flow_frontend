@@ -1,0 +1,214 @@
+<div class="dashboard-container">
+
+
+    <h1>
+        <i class="bi bi-speedometer2"></i>
+        Dashboard
+    </h1>
+
+    <p class="subtitle">
+        Vue globale de l'avancement des projets
+    </p>
+
+
+
+
+    <!-- Cards statistiques -->
+
+    <div class="stats-grid">
+
+
+        <div class="stat-card blue">
+
+            <div>
+
+                <h3>
+                    {{stats.projects}}
+                </h3>
+
+                <p>
+                    Projets
+                </p>
+
+            </div>
+
+
+            <i class="bi bi-folder"></i>
+
+        </div>
+
+
+
+
+
+        <div class="stat-card green">
+
+
+            <div>
+
+                <h3>
+                    {{stats.tasks}}
+                </h3>
+
+                <p>
+                    Total tâches
+                </p>
+
+            </div>
+
+
+            <i class="bi bi-list-task"></i>
+
+
+        </div>
+
+
+
+
+
+        <div class="stat-card success">
+
+
+            <div>
+
+                <h3>
+                    {{stats.completed}}
+                </h3>
+
+
+                <p>
+                    Terminées
+                </p>
+
+            </div>
+
+
+            <i class="bi bi-check-circle"></i>
+
+
+        </div>
+
+
+
+
+
+
+        <div class="stat-card danger">
+
+
+            <div>
+
+                <h3>
+                    {{stats.delayed}}
+                </h3>
+
+
+                <p>
+                    En retard
+                </p>
+
+            </div>
+
+
+            <i class="bi bi-clock-history"></i>
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+
+
+    <div class="content-grid">
+
+
+
+        <!-- Répartition tâches -->
+
+        <div class="card">
+
+
+            <h2>
+                Répartition des tâches
+            </h2>
+
+
+            <div class="status-list">
+
+
+                <div 
+                class="status-item"
+                *ngFor="let status of taskStatus">
+
+
+                    <span>
+                        {{status.label}}
+                    </span>
+
+
+                    <strong>
+                        {{status.value}}
+                    </strong>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+        <!-- Charge collaborateurs -->
+
+        <div class="card">
+
+
+            <h2>
+                Charge par collaborateur
+            </h2>
+
+
+
+            <div 
+            class="collaborator"
+            *ngFor="let user of collaborators">
+
+
+                <div>
+
+                    <i class="bi bi-person-circle"></i>
+
+                    {{user.name}}
+
+                </div>
+
+
+                <span>
+
+                    {{user.tasks}} tâches
+
+                </span>
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+</div>
