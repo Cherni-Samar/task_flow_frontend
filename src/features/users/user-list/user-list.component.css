@@ -1,0 +1,133 @@
+.users-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header */
+.page-header {
+  background: white;
+  padding: 20px 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 24px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.page-title {
+  margin: 0;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.total-users {
+  color: #6c757d;
+  margin: 4px 0 0 0;
+}
+
+/* Card & Table */
+.users-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.custom-table {
+  margin-bottom: 0;
+}
+
+.custom-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #495057;
+  padding: 16px 12px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.custom-table td {
+  padding: 16px 12px;
+  vertical-align: middle;
+}
+
+.email-link {
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.email-link:hover {
+  text-decoration: underline;
+}
+
+/* Badges */
+.role-badge {
+  background-color: #e3f2fd;
+  color: #1565c0;
+  margin-right: 6px;
+  font-size: 0.85rem;
+  padding: 5px 10px;
+}
+
+.job-badge {
+  background-color: #f1f3f5;
+  color: #495057;
+  font-size: 0.85rem;
+}
+
+/* Actions */
+.actions-cell button {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  margin: 0 4px;
+}
+
+.btn-edit {
+  color: #0d6efd;
+  border: 1px solid #0d6efd;
+}
+
+.btn-edit:hover {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.btn-delete {
+  color: #dc3545;
+  border: 1px solid #dc3545;
+}
+
+.btn-delete:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* States */
+.loading-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6c757d;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.alert-custom {
+  border-radius: 10px;
+  padding: 16px 20px;
+}
