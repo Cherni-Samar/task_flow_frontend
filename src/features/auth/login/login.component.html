@@ -1,0 +1,59 @@
+<div class="login-page">
+
+  <div class="login-card">
+
+    <h2>TaskFlow</h2>
+
+    <p>Connexion</p>
+
+    <div class="mb-3">
+
+      <label>Email</label>
+
+      <input
+
+      class="form-control"
+
+      [(ngModel)]="email"
+
+      type="email">
+
+    </div>
+
+    <div class="mb-3">
+
+      <label>Mot de passe</label>
+
+      <input
+
+      class="form-control"
+
+      [(ngModel)]="password"
+
+      type="password">
+
+    </div>
+
+    <div
+    *ngIf="error"
+    class="alert alert-danger">
+
+      {{error}}
+
+    </div>
+
+    <button
+
+    class="btn btn-primary w-100"
+
+    (click)="login()"
+
+    [disabled]="loading">
+
+      {{loading?'Connexion...':'Se connecter'}}
+
+    </button>
+
+  </div>
+
+</div>
