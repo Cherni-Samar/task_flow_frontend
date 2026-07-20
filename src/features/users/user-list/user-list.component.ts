@@ -4,13 +4,16 @@ import { UserService } from '../user.service';
 import { User } from '../../../shared/models/user.model';
 import { RouterModule } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
+import { RoleManagementComponent } from '../role-management/role-management.component';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    RoleManagementComponent
+
   ],
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css']
@@ -22,6 +25,10 @@ export class UserListComponent implements OnInit {
   loading = false;
 
   errorMessage = '';
+
+  selectedUser!: User;
+
+  showRoleManagement = false;
 
 
   constructor(
@@ -72,6 +79,19 @@ export class UserListComponent implements OnInit {
       }
 
     });
+
+  }
+  openRoleManagement(user: User) {
+
+    this.selectedUser = user;
+
+    this.showRoleManagement = true;
+
+  }
+
+  closeRoleManagement() {
+
+    this.showRoleManagement = false;
 
   }
 

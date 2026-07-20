@@ -1,0 +1,156 @@
+.role-card {
+
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 16px;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,0.08);
+
+}
+
+
+
+.header h3 {
+
+    font-size: 22px;
+
+    font-weight:700;
+
+    color:#1a1a2e;
+
+}
+
+
+
+.header i {
+
+    color:#0d6efd;
+
+    margin-right:8px;
+
+}
+
+
+
+.header p {
+
+    color:#6c757d;
+
+}
+
+
+
+.roles-list {
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:12px;
+
+}
+
+
+
+.role-badge {
+
+    background:
+    linear-gradient(135deg,#0d6efd,#6610f2);
+
+    color:white;
+
+    padding:8px 14px;
+
+    border-radius:20px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+
+
+.remove-role {
+
+    border:none;
+
+    background:transparent;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+}
+
+
+
+.empty {
+
+    color:#6c757d;
+
+    font-style:italic;
+
+}
+
+
+
+.add-role {
+
+    display:flex;
+
+    gap:15px;
+
+    align-items:center;
+
+}
+
+
+
+.add-role select {
+
+    max-width:300px;
+
+}
+
+
+
+.btn-primary {
+
+    border-radius:10px;
+
+    font-weight:600;
+
+}
+
+
+
+@media(max-width:600px){
+
+    .add-role{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+
+    .add-role select{
+
+        max-width:none;
+
+    }
+
+}
