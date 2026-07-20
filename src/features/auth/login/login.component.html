@@ -2,55 +2,32 @@
 
   <div class="login-card">
 
+    <div class="icon-container">
+      <i class="bi bi-kanban-fill" style="font-size:55px; color:#0d6efd;">
+      </i>
+    </div>
+
     <h2>TaskFlow</h2>
 
-    <p>Connexion</p>
+    <p>Connectez-vous à votre espace de travail</p>
 
     <div class="mb-3">
-
       <label>Email</label>
-
-      <input
-
-      class="form-control"
-
-      [(ngModel)]="email"
-
-      type="email">
-
+      <input class="form-control" [(ngModel)]="email" type="email" placeholder="Entrez votre email">
     </div>
 
     <div class="mb-3">
-
       <label>Mot de passe</label>
-
-      <input
-
-      class="form-control"
-
-      [(ngModel)]="password"
-
-      type="password">
-
+      <input class="form-control" [(ngModel)]="password" type="password" placeholder="Entrez votre mot de passe">
     </div>
 
-    <div
-    *ngIf="error"
-    class="alert alert-danger">
-
-      {{error}}
-
+    <div *ngIf="error" class="alert alert-danger">
+      {{ error }}
     </div>
 
-    <button
+    <button class="btn btn-primary w-100" (click)="login()" [disabled]="loading">
 
-    class="btn btn-primary w-100"
-
-    (click)="login()"
-
-    [disabled]="loading">
-
-      {{loading?'Connexion...':'Se connecter'}}
+      {{ loading ? 'Connexion...' : 'Se connecter' }}
 
     </button>
 
