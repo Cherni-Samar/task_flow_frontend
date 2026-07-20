@@ -1,4 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+  ChangeDetectorRef
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -12,16 +21,17 @@ import { Role } from '../../../shared/models/role.model';
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
   ],
   templateUrl: './role-management.component.html',
   styleUrls: ['./role-management.component.css']
 })
-export class RoleManagementComponent implements OnInit {
+export class RoleManagementComponent implements OnInit, OnChanges {
 
 
   @Input() user!: User;
 
+  @Output() close = new EventEmitter<void>();
 
   availableRoles: Role[] = [];
 
@@ -29,92 +39,130 @@ export class RoleManagementComponent implements OnInit {
 
   selectedRoleId!: number;
 
+  private loadedUserId!: number;
 
   constructor(
-    private userService: UserService
-  ) {}
+    private userService: UserService, private cd: ChangeDetectorRef
+
+  ) { }
 
 
   ngOnInit(): void {
 
     this.loadAvailableRoles();
 
-    this.loadUserRoles();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+
+    if (changes['user'] && changes['user'].currentValue) {
+
+      this.userRoles = [];
+
+      this.loadUserRoles();
+
+    }
 
   }
 
 
-
-  loadAvailableRoles(){
+  loadAvailableRoles() {
 
     this.userService.getRoles()
-    .subscribe({
+      .subscribe({
 
-      next:(roles)=>{
+        next: (roles) => {
 
-        this.availableRoles = roles;
+          this.availableRoles = roles;
 
-      }
+              this.cd.detectChanges();
 
-    });
+        },
+
+        error: (err) => {
+
+          console.error(err);
+
+        }
+
+      });
 
   }
 
 
 
-  loadUserRoles(){
+  loadUserRoles() {
+
+    console.log("USER SELECTIONNE :", this.user);
+
 
     this.userService
-    .getUserRoles(this.user.id!)
-    .subscribe({
+      .getUserRoles(this.user.id!)
+      .subscribe({
 
-      next:(roles)=>{
+        next: (roles) => {
 
-        this.userRoles = roles;
+          console.log("ROLES USER :", roles);
 
-      }
+          this.userRoles = roles;
 
-    });
+              this.cd.detectChanges();
+
+          // charger la liste des rôles après
+          //this.loadAvailableRoles();
+
+        },
+
+        error: (err) => {
+
+          console.error(err);
+
+        }
+
+      });
 
   }
 
+  assignRole() {
 
-
-  assignRole(){
-
-    if(!this.selectedRoleId)
+    if (!this.selectedRoleId)
       return;
 
 
     this.userService
-    .assignRole(
-      this.user.id!,
-      this.selectedRoleId
-    )
-    .subscribe(()=>{
+      .assignRole(
+        this.user.id!,
+        this.selectedRoleId
+      )
+      .subscribe(() => {
 
-      this.selectedRoleId = 0;
+        this.selectedRoleId = 0;
 
-      this.loadUserRoles();
+        this.loadUserRoles();
 
-    });
+      });
 
   }
 
 
 
-  removeRole(roleId:number){
+  removeRole(roleId: number) {
 
     this.userService
-    .removeRole(
-      this.user.id!,
-      roleId
-    )
-    .subscribe(()=>{
+      .removeRole(
+        this.user.id!,
+        roleId
+      )
+      .subscribe(() => {
 
-      this.loadUserRoles();
+        this.loadUserRoles();
 
-    });
+      });
+
+  }
+  closePanel() {
+
+    this.close.emit();
 
   }
 
