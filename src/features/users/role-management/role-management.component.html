@@ -1,94 +1,63 @@
-<div class="role-card">
+<div class="role-panel">
 
 
-<div class="header">
-
-    <h3>
-        <i class="bi bi-shield-lock"></i>
-        Gestion des rôles
-    </h3>
+<h3>
+ Gestion des rôles
+</h3>
 
 
-    <p>
-        Utilisateur :
-        <strong>
-            {{ user.fullName }}
-        </strong>
+<p>
+Utilisateur :
+<strong>
+{{user.fullName}}
+</strong>
+</p>
+
+
+
+<hr>
+
+<h5>Rôles actuels</h5>
+
+
+<div *ngIf="userRoles && userRoles.length > 0">
+
+    <span 
+      *ngFor="let role of userRoles"
+      class="badge bg-primary me-2">
+
+        {{ role.name }}
+
+    </span>
+
+</div>
+
+
+<div *ngIf="!userRoles || userRoles.length === 0">
+
+    <p class="text-muted">
+        Aucun rôle affecté
     </p>
 
 </div>
 
 
-
 <hr>
 
 
 
 <h5>
-    Rôles actuels
+Ajouter un rôle
 </h5>
 
 
-<div class="roles-list">
-
-
-<span 
-class="role-badge"
-*ngFor="let role of userRoles">
-
-
-{{ role.name }}
-
-
-<button
-class="remove-role"
-(click)="removeRole(role.id)">
-
-<i class="bi bi-x"></i>
-
-</button>
-
-
-</span>
-
-
-
-<div 
-*ngIf="userRoles.length === 0"
-class="empty">
-
-Aucun rôle affecté
-
-</div>
-
-
-</div>
-
-
-
-
-<hr>
-
-
-
-<h5>
-    Ajouter un rôle
-</h5>
-
-
-<div class="add-role">
-
-
-<select
+<select 
 class="form-select"
 [(ngModel)]="selectedRoleId">
 
 
-<option 
-[value]="0">
-
--- Sélectionner un rôle --
-
+<option [ngValue]="null">
+Choisir un rôle
 </option>
 
 
@@ -96,27 +65,12 @@ class="form-select"
 *ngFor="let role of availableRoles"
 [value]="role.id">
 
-{{ role.name }}
+{{role.name}}
 
 </option>
 
 
 </select>
-
-
-
-<button
-class="btn btn-primary"
-(click)="assignRole()">
-
-<i class="bi bi-plus-circle"></i>
-
-Ajouter
-
-</button>
-
-
-</div>
 
 
 </div>

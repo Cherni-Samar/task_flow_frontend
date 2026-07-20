@@ -1,65 +1,86 @@
 <div class="users-container">
-  
+
+
   <!-- Header -->
   <div class="page-header">
+
     <div class="header-content">
+
       <div>
 
         <h2 class="page-title">
+
           <i class="bi bi-people-fill"></i>
+
           Gestion des Utilisateurs
+
         </h2>
 
+
         <p class="total-users">
+
           Total :
           <strong>{{ users.length }}</strong>
           utilisateurs
+
         </p>
 
       </div>
-      
-      <button 
-      class="btn btn-primary btn-add"
-      routerLink="/users/create">
+
+
+
+      <button class="btn btn-primary btn-add" routerLink="/users/create">
+
 
         <i class="bi bi-person-plus"></i>
 
         Ajouter un utilisateur
 
+
       </button>
 
+
     </div>
+
   </div>
+
+
 
 
 
   <!-- Loading -->
-  <div 
-  *ngIf="loading" 
-  class="loading-state">
 
-    <div 
-    class="spinner-border text-primary" 
-    role="status">
+  <div *ngIf="loading" class="loading-state">
+
+
+    <div class="spinner-border text-primary">
     </div>
 
+
     <p>
+
       Chargement des utilisateurs...
+
     </p>
 
+
   </div>
+
+
+
 
 
 
 
   <!-- Error -->
-  <div 
-  *ngIf="errorMessage" 
-  class="alert alert-danger alert-custom">
+
+  <div *ngIf="errorMessage" class="alert alert-danger alert-custom">
+
 
     <i class="bi bi-exclamation-triangle"></i>
 
-    {{ errorMessage }}
+    {{errorMessage}}
+
 
   </div>
 
@@ -67,10 +88,11 @@
 
 
 
-  <!-- Table -->
-  <div 
-  *ngIf="!loading && !errorMessage" 
-  class="card users-card">
+
+
+  <!-- Users Table -->
+
+  <div *ngIf="!loading && !errorMessage" class="card users-card">
 
 
     <div class="card-body p-0">
@@ -80,6 +102,7 @@
 
 
         <table class="table custom-table">
+
 
 
           <thead>
@@ -102,7 +125,9 @@
 
             </tr>
 
+
           </thead>
+
 
 
 
@@ -112,20 +137,18 @@
             <tr *ngFor="let user of users">
 
 
-              <!-- ID -->
               <td class="fw-bold text-muted">
 
-                #{{ user.id }}
+                #{{user.id}}
 
               </td>
 
 
 
 
-              <!-- Full name -->
               <td class="fw-semibold">
 
-                {{ user.fullName }}
+                {{user.fullName}}
 
               </td>
 
@@ -133,42 +156,39 @@
 
 
 
-              <!-- Email -->
               <td>
 
-                <a 
-                href="mailto:{{ user.email }}" 
-                class="email-link">
 
-                  {{ user.email }}
+                <a href="mailto:{{user.email}}" class="email-link">
+
+                  {{user.email}}
 
                 </a>
 
+
               </td>
+
 
 
 
 
 
               <!-- Roles -->
+
               <td>
 
 
-                <span 
-                *ngFor="let role of user.roles"
-                class="badge role-badge">
+                <span *ngFor="let role of user.roles" class="badge role-badge">
 
 
-                  {{ role.name }}
+                  {{role.name}}
 
 
                 </span>
 
 
 
-                <span 
-                *ngIf="!user.roles || user.roles.length === 0"
-                class="text-muted">
+                <span *ngIf="!user.roles || user.roles.length===0" class="text-muted">
 
 
                   Aucun rôle
@@ -183,13 +203,16 @@
 
 
 
-              <!-- Job Title -->
+
+
+              <!-- Job title -->
+
               <td>
 
 
                 <span class="badge job-badge">
 
-                  {{ user.jobTitle || 'Non défini' }}
+                  {{user.jobTitle || 'Non défini'}}
 
                 </span>
 
@@ -200,15 +223,17 @@
 
 
 
+
+
               <!-- Actions -->
+
               <td class="text-center actions-cell">
 
 
 
                 <!-- Edit -->
-                <button 
-                class="btn btn-sm btn-edit"
-                [routerLink]="['/users/edit', user.id]">
+
+                <button class="btn btn-sm btn-edit" [routerLink]="['/users/edit',user.id]">
 
 
                   <i class="bi bi-pencil"></i>
@@ -220,10 +245,9 @@
 
 
 
-                <!-- Role Management -->
-                <button 
-                class="btn btn-sm btn-role"
-                (click)="openRoleManagement(user)">
+                <!-- Roles -->
+
+                <button class="btn btn-sm btn-role" title="Gestion des rôles" (click)="openRoleManagement(user)">
 
 
                   <i class="bi bi-shield-lock"></i>
@@ -236,8 +260,9 @@
 
 
                 <!-- Delete -->
-                <button 
-                class="btn btn-sm btn-delete">
+
+
+                <button class="btn btn-sm btn-delete">
 
 
                   <i class="bi bi-trash"></i>
@@ -248,7 +273,6 @@
 
 
               </td>
-
 
 
             </tr>
@@ -273,23 +297,27 @@
 
 
 
-  <!-- Empty State -->
-  <div 
-  *ngIf="!loading && users.length === 0 && !errorMessage"
-  class="empty-state">
 
 
-    <i class="bi bi-people display-1 text-muted mb-3"></i>
+
+  <!-- Empty state -->
+
+  <div *ngIf="!loading && users.length===0 && !errorMessage" class="empty-state">
+
+
+    <i class="bi bi-people display-1 text-muted"></i>
 
 
     <h5>
+
       Aucun utilisateur trouvé
+
     </h5>
 
 
     <p class="text-muted">
 
-      Commencez par ajouter un nouvel utilisateur.
+      Commencez par ajouter un utilisateur.
 
     </p>
 
@@ -301,21 +329,41 @@
 
 
 
-  <!-- Role Management Panel -->
-
-  <div 
-  class="role-management-wrapper"
-  *ngIf="showRoleManagement">
+</div>
 
 
-      <app-role-management
-
-        [user]="selectedUser">
-
-      </app-role-management>
 
 
-  </div>
+
+
+
+
+
+<!-- ============================= -->
+<!-- ROLE MANAGEMENT SIDE PANEL -->
+<!-- ============================= -->
+
+
+
+<!-- Overlay -->
+
+<div class="overlay" *ngIf="showRoleManagement" (click)="closeRoleManagement()">
+
+
+</div>
+
+
+
+
+
+<!-- Side panel -->
+
+<div class="side-panel" *ngIf="showRoleManagement">
+
+
+  <app-role-management *ngIf="showRoleManagement" [user]="selectedUser" (close)="closeRoleManagement()">
+
+  </app-role-management>
 
 
 
@@ -325,7 +373,4 @@
 
 
 
-<!-- Bootstrap Icons -->
-<link 
-href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" 
-rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
