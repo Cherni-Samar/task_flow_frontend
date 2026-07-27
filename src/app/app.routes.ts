@@ -18,6 +18,12 @@ export const routes: Routes = [
         .then(c => c.LoginComponent)
   },
   {
+    path: 'users/create',
+    loadComponent: () =>
+      import('../features/users/user-form/user-form.component')
+        .then(m => m.UserFormComponent)
+  },
+  {
     path: '',
     component: LayoutComponent,
     canActivate: [authGuard],

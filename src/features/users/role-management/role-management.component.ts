@@ -37,9 +37,7 @@ export class RoleManagementComponent implements OnInit, OnChanges {
 
   userRoles: Role[] = [];
 
-  selectedRoleId!: number;
-
-  private loadedUserId!: number;
+  selectedRoleId: number | null = null;
 
   constructor(
     private userService: UserService, private cd: ChangeDetectorRef
@@ -75,7 +73,7 @@ export class RoleManagementComponent implements OnInit, OnChanges {
 
           this.availableRoles = roles;
 
-              this.cd.detectChanges();
+          this.cd.detectChanges();
 
         },
 
@@ -106,7 +104,7 @@ export class RoleManagementComponent implements OnInit, OnChanges {
 
           this.userRoles = roles;
 
-              this.cd.detectChanges();
+          this.cd.detectChanges();
 
           // charger la liste des rôles après
           //this.loadAvailableRoles();
