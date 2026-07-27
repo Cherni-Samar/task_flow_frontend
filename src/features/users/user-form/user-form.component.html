@@ -1,0 +1,159 @@
+<div class="form-page">
+
+
+<div class="form-card">
+
+
+<h2>
+
+<i class="bi bi-person-plus-fill"></i>
+
+{{id ? 'Modifier utilisateur':'Ajouter utilisateur'}}
+
+</h2>
+
+
+
+
+<div class="mb-3">
+
+<label>
+Nom complet
+</label>
+
+<input
+class="form-control"
+[(ngModel)]="fullName">
+
+</div>
+
+
+
+
+
+<div class="mb-3">
+
+<label>
+Email
+</label>
+
+<input
+class="form-control"
+type="email"
+[(ngModel)]="email">
+
+</div>
+
+
+
+
+
+
+<div class="mb-3">
+
+<label>
+Mot de passe
+</label>
+
+<input
+class="form-control"
+type="password"
+[(ngModel)]="password">
+
+</div>
+
+
+
+
+
+
+
+<div class="mb-3">
+
+<label>
+Poste
+</label>
+
+
+<select
+class="form-control"
+[(ngModel)]="jobTitle">
+
+
+<option
+*ngFor="let job of jobTitles"
+[value]="job">
+
+{{job}}
+
+</option>
+
+
+</select>
+
+
+</div>
+
+
+
+
+
+
+<div class="mb-3">
+
+
+<label>
+Rôles
+</label>
+
+
+<div class="roles-container">
+
+
+<div
+*ngFor="let role of roles"
+class="role-item">
+
+
+<input
+type="checkbox"
+[checked]="selectedRoles.includes(role.id)"
+(change)="toggleRole(role.id)">
+
+
+
+{{role.name}}
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<button
+class="btn btn-primary w-100"
+(click)="save()"
+[disabled]="loading">
+
+
+{{loading?'Sauvegarde...':'Enregistrer'}}
+
+
+</button>
+
+
+
+
+</div>
+
+
+</div>

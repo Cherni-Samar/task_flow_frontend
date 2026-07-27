@@ -9,8 +9,8 @@ export interface CreateUser {
 
   password: string;
 
-  roles: Role[];
-
   jobTitle: JobTitle;
+  
+  roleIds:number[];
 
 }
