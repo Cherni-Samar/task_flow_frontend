@@ -81,6 +81,37 @@ export class UserListComponent implements OnInit {
     });
 
   }
+
+  deleteUser(user: User): void {
+
+  if (!user.id) {
+    return;
+  }
+
+  if (!confirm(`Voulez-vous supprimer ${user.fullName} ?`)) {
+    return;
+  }
+
+  this.userService.delete(user.id)
+    .subscribe({
+
+      next: () => {
+
+        this.loadUsers();
+
+      },
+
+      error: (err) => {
+
+        console.error(err);
+
+        alert("Erreur lors de la suppression.");
+
+      }
+
+    });
+
+}
   openRoleManagement(user: User) {
 
     this.selectedUser = user;
