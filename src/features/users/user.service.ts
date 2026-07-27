@@ -48,6 +48,14 @@ export class UserService {
 
   }
 
+   getCurrentUser(){
+
+    return this.http.get<User>(
+      `${this.api}/me`
+    );
+
+  }
+
 
   // récupérer les rôles d'un utilisateur
 
