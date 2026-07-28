@@ -18,7 +18,24 @@
 
 }
 
+.dashboard-layout{
+    display:flex;
+    height:100vh;
+    background:#f5f7fb;
+}
 
+.main-content{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+.page-content{
+    flex:1;
+    overflow-y:auto;
+    padding:30px;
+}
 
 /* =========================
    FORM CARD
