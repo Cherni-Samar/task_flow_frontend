@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { UserService } from '../user.service';
 import { Role } from '../../../shared/models/role.model';
-import { JobTitle } from '../../../shared/models/job-title.model';
+import { JobTitle } from '../../../shared/models/job-title.enum';
 
 
 @Component({
