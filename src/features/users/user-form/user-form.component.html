@@ -1,159 +1,157 @@
-<div class="form-page">
+<div class="dashboard-layout">
 
+    <!-- Sidebar -->
+    <app-sidebar></app-sidebar>
 
-<div class="form-card">
+    <!-- Main Content -->
+    <div class="main-content">
 
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
 
-<h2>
+        <!-- Page -->
+        <div class="page-content">
 
-<i class="bi bi-person-plus-fill"></i>
+            <div class="form-page">
 
-{{id ? 'Modifier utilisateur':'Ajouter utilisateur'}}
+                <div class="form-card">
 
-</h2>
+                    <h2>
 
+                        <i class="bi bi-person-plus-fill me-2"></i>
 
+                        {{ id ? 'Modifier utilisateur' : 'Ajouter utilisateur' }}
 
+                    </h2>
 
-<div class="mb-3">
+                    <!-- Nom -->
 
-<label>
-Nom complet
-</label>
+                    <div class="mb-3">
 
-<input
-class="form-control"
-[(ngModel)]="fullName">
+                        <label>
 
-</div>
+                            Nom complet
 
+                        </label>
 
+                        <input
+                            class="form-control"
+                            [(ngModel)]="fullName">
 
+                    </div>
 
+                    <!-- Email -->
 
-<div class="mb-3">
+                    <div class="mb-3">
 
-<label>
-Email
-</label>
+                        <label>
 
-<input
-class="form-control"
-type="email"
-[(ngModel)]="email">
+                            Email
 
-</div>
+                        </label>
 
+                        <input
+                            class="form-control"
+                            type="email"
+                            [(ngModel)]="email">
 
+                    </div>
 
+                    <!-- Password -->
 
+                    <div class="mb-3">
 
+                        <label>
 
-<div class="mb-3">
+                            Mot de passe
 
-<label>
-Mot de passe
-</label>
+                        </label>
 
-<input
-class="form-control"
-type="password"
-[(ngModel)]="password">
+                        <input
+                            class="form-control"
+                            type="password"
+                            [(ngModel)]="password">
 
-</div>
+                    </div>
 
+                    <!-- Job -->
 
+                    <div class="mb-3">
 
+                        <label>
 
+                            Poste
 
+                        </label>
 
+                        <select
+                            class="form-control"
+                            [(ngModel)]="jobTitle">
 
-<div class="mb-3">
+                            <option
+                                *ngFor="let job of jobTitles"
+                                [ngValue]="job">
 
-<label>
-Poste
-</label>
+                                {{ job }}
 
+                            </option>
 
-<select
-class="form-control"
-[(ngModel)]="jobTitle">
+                        </select>
 
+                    </div>
 
-<option
-*ngFor="let job of jobTitles"
-[value]="job">
+                    <!-- Roles -->
 
-{{job}}
+                    <div class="mb-4">
 
-</option>
+                        <label>
 
+                            Rôles
 
-</select>
+                        </label>
 
+                        <div class="roles-container">
 
-</div>
+                            <div
+                                *ngFor="let role of roles"
+                                class="role-item">
 
+                                <input
+                                    type="checkbox"
+                                    [checked]="selectedRoles.includes(role.id)"
+                                    (change)="toggleRole(role.id)">
 
+                                <span>
 
+                                    {{ role.name }}
 
+                                </span>
 
+                            </div>
 
-<div class="mb-3">
+                        </div>
 
+                    </div>
 
-<label>
-Rôles
-</label>
+                    <!-- Button -->
 
+                    <button
+                        class="btn btn-primary w-100"
+                        (click)="save()"
+                        [disabled]="loading ||!isFormValid()">
 
-<div class="roles-container">
+                        <i class="bi bi-check-circle me-2"></i>
 
+                        {{ loading ? 'Sauvegarde...' : 'Enregistrer' }}
 
-<div
-*ngFor="let role of roles"
-class="role-item">
+                    </button>
 
+                </div>
 
-<input
-type="checkbox"
-[checked]="selectedRoles.includes(role.id)"
-(change)="toggleRole(role.id)">
+            </div>
 
+        </div>
 
-
-{{role.name}}
-
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-<button
-class="btn btn-primary w-100"
-(click)="save()"
-[disabled]="loading">
-
-
-{{loading?'Sauvegarde...':'Enregistrer'}}
-
-
-</button>
-
-
-
-
-</div>
-
+    </div>
 
 </div>

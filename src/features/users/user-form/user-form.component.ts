@@ -6,6 +6,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../user.service';
 import { Role } from '../../../shared/models/role.model';
 import { JobTitle } from '../../../shared/models/job-title.enum';
+import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
+import { SidebarComponent } from '../../../shared/components/sidebar/sidebar.component';
 
 
 @Component({
@@ -13,7 +15,9 @@ import { JobTitle } from '../../../shared/models/job-title.enum';
     standalone: true,
     imports: [
         CommonModule,
-        FormsModule
+        FormsModule,
+        NavbarComponent,
+        SidebarComponent
     ],
     templateUrl: './user-form.component.html',
     styleUrls: ['./user-form.component.css']
@@ -77,7 +81,17 @@ export class UserFormComponent implements OnInit {
 
 
 
+    isFormValid(): boolean {
 
+        return !!(
+            this.fullName.trim() &&
+            this.email.trim() &&
+            this.password.trim() &&
+            this.jobTitle &&
+            this.selectedRoles.length > 0
+        );
+
+    }
 
     loadRoles() {
 
