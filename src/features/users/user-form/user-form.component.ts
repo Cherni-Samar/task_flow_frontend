@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-
-import { UserService } from '../user.service';
+import { ChangeDetectorRef } from '@angular/core'; import { UserService } from '../user.service';
 import { Role } from '../../../shared/models/role.model';
 import { JobTitle } from '../../../shared/models/job-title.enum';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { SidebarComponent } from '../../../shared/components/sidebar/sidebar.component';
+import { UpdateUser } from '../../../shared/models/update-user.model';
+import { CreateUser } from '../../../shared/models/create-user.model';
 
 
 @Component({
@@ -55,7 +56,9 @@ export class UserFormComponent implements OnInit {
     constructor(
         private userService: UserService,
         private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private cd: ChangeDetectorRef
+
     ) { }
 
 
@@ -66,15 +69,22 @@ export class UserFormComponent implements OnInit {
         this.loadRoles();
 
 
-        this.id =
-            Number(this.route.snapshot.paramMap.get('id'));
+        this.route.paramMap.subscribe(params => {
 
 
-        if (this.id) {
+            const id = params.get('id');
 
-            this.loadUser();
 
-        }
+            if (id) {
+
+                this.id = Number(id);
+
+                this.loadUser();
+
+            }
+
+
+        });
 
 
     }
@@ -82,6 +92,17 @@ export class UserFormComponent implements OnInit {
 
 
     isFormValid(): boolean {
+
+        if (this.id) {
+
+            return !!(
+                this.fullName.trim() &&
+                this.email.trim() &&
+                this.jobTitle &&
+                this.selectedRoles.length > 0
+            );
+
+        }
 
         return !!(
             this.fullName.trim() &&
@@ -116,25 +137,42 @@ export class UserFormComponent implements OnInit {
     loadUser() {
 
         this.userService.getById(this.id!)
-            .subscribe(user => {
+            .subscribe({
+
+                next: (user) => {
 
 
-                this.fullName = user.fullName;
+                    this.fullName = user.fullName;
 
-                this.email = user.email;
+                    this.email = user.email;
 
-                this.jobTitle = user.jobTitle;
+                    this.jobTitle = user.jobTitle;
 
 
-                this.selectedRoles =
-                    user.roles.map(r => r.id);
+                    this.selectedRoles = user.roles.map(
+                        role => role.id
+                    );
 
+                    this.cd.detectChanges();
+
+
+                    console.log("USER CHARGE :", user);
+
+                },
+
+
+                error: (err) => {
+
+                    console.error(
+                        "Erreur chargement user",
+                        err
+                    );
+
+                }
 
             });
 
-
     }
-
 
 
 
@@ -172,53 +210,84 @@ export class UserFormComponent implements OnInit {
     save() {
 
 
-        const data = {
-
-            fullName: this.fullName,
-
-            email: this.email,
-
-            password: this.password,
-
-            jobTitle: this.jobTitle,
-
-            roleIds: this.selectedRoles
-
-
-        };
-
-
-
         this.loading = true;
-
 
 
         if (this.id) {
 
 
-            this.userService.update(
-                this.id,
-                data
-            )
-                .subscribe(() => {
+            const data: UpdateUser = {
 
-                    this.router.navigate(['/users']);
+                fullName: this.fullName,
+
+                email: this.email,
+
+                jobTitle: this.jobTitle,
+
+                roleIds: this.selectedRoles
+
+            };
+
+
+            this.userService
+                .update(this.id, data)
+                .subscribe({
+
+                    next: () => {
+
+                        this.router.navigate(['/users']);
+
+                    },
+
+                    error: (err) => {
+
+                        console.error(err);
+
+                        this.loading = false;
+
+                    }
 
                 });
-
 
 
         }
         else {
 
 
-            this.userService.create(data)
-                .subscribe(() => {
+            const data: CreateUser = {
 
-                    this.router.navigate(['/users']);
+                fullName: this.fullName,
+
+                email: this.email,
+
+                password: this.password,
+
+                jobTitle: this.jobTitle,
+
+                roleIds: this.selectedRoles
+
+            };
+
+
+            this.userService
+                .create(data)
+                .subscribe({
+
+                    next: () => {
+
+                        this.router.navigate(['/users']);
+
+                    },
+
+                    error: (err) => {
+
+                        console.error(err);
+
+                        this.loading = false;
+
+                    }
 
                 });
-
 
         }
 

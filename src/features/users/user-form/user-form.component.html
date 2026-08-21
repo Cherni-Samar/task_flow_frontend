@@ -34,9 +34,7 @@
 
                         </label>
 
-                        <input
-                            class="form-control"
-                            [(ngModel)]="fullName">
+                        <input class="form-control" [(ngModel)]="fullName">
 
                     </div>
 
@@ -50,16 +48,15 @@
 
                         </label>
 
-                        <input
-                            class="form-control"
-                            type="email"
-                            [(ngModel)]="email">
+                        <input class="form-control" type="email" [(ngModel)]="email">
 
                     </div>
 
                     <!-- Password -->
 
-                    <div class="mb-3">
+                    <!-- Password uniquement en création -->
+
+                    <div class="mb-3" *ngIf="!id">
 
                         <label>
 
@@ -67,10 +64,7 @@
 
                         </label>
 
-                        <input
-                            class="form-control"
-                            type="password"
-                            [(ngModel)]="password">
+                        <input class="form-control" type="password" [(ngModel)]="password">
 
                     </div>
 
@@ -84,13 +78,9 @@
 
                         </label>
 
-                        <select
-                            class="form-control"
-                            [(ngModel)]="jobTitle">
+                        <select class="form-control" [(ngModel)]="jobTitle">
 
-                            <option
-                                *ngFor="let job of jobTitles"
-                                [ngValue]="job">
+                            <option *ngFor="let job of jobTitles" [ngValue]="job">
 
                                 {{ job }}
 
@@ -112,13 +102,9 @@
 
                         <div class="roles-container">
 
-                            <div
-                                *ngFor="let role of roles"
-                                class="role-item">
+                            <div *ngFor="let role of roles" class="role-item">
 
-                                <input
-                                    type="checkbox"
-                                    [checked]="selectedRoles.includes(role.id)"
+                                <input type="checkbox" [checked]="selectedRoles.includes(role.id)"
                                     (change)="toggleRole(role.id)">
 
                                 <span>
@@ -135,10 +121,7 @@
 
                     <!-- Button -->
 
-                    <button
-                        class="btn btn-primary w-100"
-                        (click)="save()"
-                        [disabled]="loading ||!isFormValid()">
+                    <button class="btn btn-primary w-100" (click)="save()" [disabled]="loading ||!isFormValid()">
 
                         <i class="bi bi-check-circle me-2"></i>
 

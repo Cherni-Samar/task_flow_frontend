@@ -6,6 +6,7 @@ import { CreateUser } from '../../shared/models/create-user.model';
 import { User } from '../../shared/models/user.model';
 import { Permission } from '../../shared/models/permission.model';
 import { Role } from '../../shared/models/role.model';
+import { UpdateUser } from '../../shared/models/update-user.model';
 
 
 @Injectable({
@@ -29,7 +30,7 @@ export class UserService {
     return this.http.post<User>(this.api, user);
   }
 
-  update(id: number, user: CreateUser): Observable<User> {
+  update(id: number, user: UpdateUser): Observable<User> {
     return this.http.put<User>(`${this.api}/${id}`, user);
   }
 
