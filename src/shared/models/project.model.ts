@@ -10,6 +10,7 @@ export interface Project {
   description: string;
   startDate: string;
   endDate: string;
+  progress: number;
   status: ProjectStatus;
   manager: ProjectUser;
   members: ProjectUser[];
