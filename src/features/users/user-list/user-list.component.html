@@ -29,7 +29,7 @@
 
 
 
-      <button class="btn btn-primary btn-add" routerLink="/users/create">
+      <button [disabled]="!isAdmin" class="btn btn-primary btn-add" routerLink="/users/create">
 
 
         <i class="bi bi-person-plus"></i>
@@ -233,7 +233,7 @@
 
                 <!-- Edit -->
 
-                <button class="btn btn-sm btn-edit" [routerLink]="['/users/edit',user.id]">
+                <button [disabled]="!isAdmin" class=" btn btn-sm btn-edit" [routerLink]="['/users/edit',user.id]">
 
 
                   <i class="bi bi-pencil"></i>
@@ -247,7 +247,8 @@
 
                 <!-- Roles -->
 
-                <button class="btn btn-sm btn-role" title="Gestion des rôles" (click)="openRoleManagement(user)">
+                <button [disabled]="!isAdmin" class=" btn btn-sm btn-role" title="Gestion des rôles"
+                  (click)="openRoleManagement(user)">
 
 
                   <i class="bi bi-shield-lock"></i>
@@ -262,9 +263,7 @@
                 <!-- Delete -->
 
 
-                <button class="btn btn-sm btn-delete"
-                    (click)="deleteUser(user)"
->
+                <button [disabled]="!isAdmin" class="btn btn-sm btn-delete" (click)="deleteUser(user)">
 
 
                   <i class="bi bi-trash"></i>

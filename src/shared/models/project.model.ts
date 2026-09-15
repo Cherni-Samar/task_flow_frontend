@@ -1,19 +1,33 @@
+export interface ProjectUser {
+  id: number;
+  fullName: string;
+  email: string;
+}
+
 export interface Project {
+  id?: number;
+  name: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  status: ProjectStatus;
+  manager: ProjectUser;
+  members: ProjectUser[];
+}
 
-    id:number;
+export enum ProjectStatus {
+  PLANNED = 'PLANNED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED'
+}
 
-    name:string;
-
-    description:string;
-
-    manager:string;
-
-    status:string;
-
-    progress:number;
-
-    startDate:string;
-
-    endDate:string;
-
+export interface CreateProjectRequest {
+  name: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  status: ProjectStatus;
+  managerId: number;
+  memberIds: number[];
 }

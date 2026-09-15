@@ -20,6 +20,8 @@ import { RoleManagementComponent } from '../role-management/role-management.comp
 })
 export class UserListComponent implements OnInit {
 
+  isAdmin = false;
+
   users: User[] = [];
 
   loading = false;
@@ -39,9 +41,30 @@ export class UserListComponent implements OnInit {
   ngOnInit(): void {
     console.log("INIT USER COMPONENT");
 
+    this.loadCurrentUser();
+
     this.loadUsers();
   }
 
+  loadCurrentUser(): void {
+    this.userService.getCurrentUser().subscribe({
+      next: (user) => {
+        this.isAdmin = user.roles?.some(
+          role => role.name === 'ADMIN'
+        ) ?? false;
+
+
+        console.log('CURRENT USER:', user);
+        console.log('IS ADMIN:', this.isAdmin);
+        this.cd.detectChanges();
+
+      },
+      error: (err) => {
+        console.error('Erreur récupération utilisateur connecté', err);
+        this.isAdmin = false;
+      }
+    });
+  }
 
   loadUsers(): void {
 

@@ -24,6 +24,12 @@ export const routes: Routes = [
         .then(m => m.UserFormComponent)
   },
   {
+    path: 'users/edit/:id',
+    loadComponent: () =>
+      import('../features/users/user-form/user-form.component')
+      .then(m => m.UserFormComponent)
+  },
+  {
     path: '',
     component: LayoutComponent,
     canActivate: [authGuard],
