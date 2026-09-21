@@ -152,7 +152,7 @@
 
 
         <!-- Modifier -->
-        <button class="btn-edit" [routerLink]="['/projects/edit', project.id]" title="Modifier le projet">
+        <button class="btn-edit" [routerLink]="['/projects/edit', project.id]" title="Modifier le projet" [disabled]="!isAdmin && !isManager">
 
           <i class="bi bi-pencil"></i>
 

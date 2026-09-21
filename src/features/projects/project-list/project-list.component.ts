@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
 import { ProjectService } from '../project.service';
@@ -30,7 +30,8 @@ export class ProjectListComponent implements OnInit {
   errorMessage = '';
 
   constructor(
-    private projectService: ProjectService, private userService: UserService, private router: Router
+    private projectService: ProjectService, private userService: UserService, private router: Router, private cd: ChangeDetectorRef
+
 
   ) { }
 
@@ -50,6 +51,9 @@ export class ProjectListComponent implements OnInit {
         this.isManager = user.roles?.some(
           role => role.name === 'MANAGER'
         ) ?? false;
+
+        this.cd.detectChanges();
+
       },
       error: (err) => {
         console.error('Erreur récupération utilisateur connecté', err);
@@ -89,6 +93,8 @@ export class ProjectListComponent implements OnInit {
         }));
 
         this.loading = false;
+        this.cd.detectChanges();
+
       },
 
       error: (error) => {
@@ -101,9 +107,11 @@ export class ProjectListComponent implements OnInit {
           'Impossible de charger les projets.';
 
         this.loading = false;
+
       }
     });
   }
+
 
   /**
    * Convertir les statuts du backend vers ceux du HTML

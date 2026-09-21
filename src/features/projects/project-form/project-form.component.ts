@@ -211,6 +211,8 @@ export class ProjectFormComponent implements OnInit {
 
                 this.errorMessage =
                     'Impossible de récupérer l\'utilisateur connecté.';
+                this.cd.detectChanges();
+
             }
         });
     }
