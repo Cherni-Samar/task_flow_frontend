@@ -14,22 +14,17 @@
       </p>
     </div>
 
-    <button
-      routerLink="/projects/create"
-      class="btn-add">
+    <button class="btn-add" routerLink="/projects/create" [disabled]="!isAdmin && !isManager" >
 
       <i class="bi bi-plus-circle"></i>
-      Nouveau projet
-
+      Ajouter un projet
     </button>
 
   </div>
 
 
   <!-- Message de chargement -->
-  <div
-    *ngIf="loading"
-    class="alert alert-info">
+  <div *ngIf="loading" class="alert alert-info">
 
     <i class="bi bi-hourglass-split"></i>
     Chargement des projets...
@@ -38,9 +33,7 @@
 
 
   <!-- Message d'erreur -->
-  <div
-    *ngIf="errorMessage"
-    class="alert alert-danger">
+  <div *ngIf="errorMessage" class="alert alert-danger">
 
     <i class="bi bi-exclamation-triangle"></i>
     {{ errorMessage }}
@@ -49,9 +42,7 @@
 
 
   <!-- Aucun projet -->
-  <div
-    *ngIf="!loading && projects.length === 0 && !errorMessage"
-    class="empty-state">
+  <div *ngIf="!loading && projects.length === 0 && !errorMessage" class="empty-state">
 
     <i class="bi bi-folder-x"></i>
 
@@ -63,9 +54,7 @@
       Commencez par créer votre premier projet.
     </p>
 
-    <button
-      routerLink="/projects/create"
-      class="btn-add">
+    <button routerLink="/projects/create" class="btn-add">
 
       <i class="bi bi-plus-circle"></i>
       Créer un projet
@@ -76,15 +65,11 @@
 
 
   <!-- Liste des projets -->
-  <div
-    class="project-grid"
-    *ngIf="!loading && projects.length > 0">
+  <div class="project-grid" *ngIf="!loading && projects.length > 0">
 
 
     <!-- Carte d'un projet -->
-    <div
-      class="project-card"
-      *ngFor="let project of projects">
+    <div class="project-card" *ngFor="let project of projects">
 
 
       <!-- En-tête de la carte -->
@@ -94,11 +79,8 @@
           {{ project.name }}
         </h2>
 
-        <span
-          class="status"
-          [class.done]="project.status === 'TERMINE'"
-          [class.progress]="project.status === 'EN_COURS'"
-          [class.planned]="project.status === 'PLANIFIE'"
+        <span class="status" [class.done]="project.status === 'TERMINE'"
+          [class.progress]="project.status === 'EN_COURS'" [class.planned]="project.status === 'PLANIFIE'"
           [class.cancelled]="project.status === 'ANNULE'">
 
           {{ project.status }}
@@ -152,9 +134,7 @@
 
         <div class="progress-bar">
 
-          <div
-            class="progress-value"
-            [style.width.%]="project.progress">
+          <div class="progress-value" [style.width.%]="project.progress">
 
           </div>
 
@@ -172,10 +152,7 @@
 
 
         <!-- Modifier -->
-        <button
-          class="btn-edit"
-          [routerLink]="['/projects/edit', project.id]"
-          title="Modifier le projet">
+        <button class="btn-edit" [routerLink]="['/projects/edit', project.id]" title="Modifier le projet">
 
           <i class="bi bi-pencil"></i>
 
@@ -183,10 +160,7 @@
 
 
         <!-- Supprimer -->
-        <button
-          class="btn-delete"
-          (click)="deleteProject(project.id)"
-          title="Supprimer le projet">
+        <button class="btn-delete" (click)="deleteProject(project.id)" title="Supprimer le projet" [disabled]="!isAdmin && !isManager">
 
           <i class="bi bi-trash"></i>
 
@@ -194,10 +168,7 @@
 
 
         <!-- Consulter -->
-        <button
-          class="btn-view"
-          [routerLink]="['/projects', project.id]"
-          title="Consulter le projet">
+        <button class="btn-view" [routerLink]="['/projects', project.id]" title="Consulter le projet">
 
           <i class="bi bi-eye"></i>
 
