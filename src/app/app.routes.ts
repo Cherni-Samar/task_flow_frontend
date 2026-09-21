@@ -27,7 +27,7 @@ export const routes: Routes = [
     path: 'users/edit/:id',
     loadComponent: () =>
       import('../features/users/user-form/user-form.component')
-      .then(m => m.UserFormComponent)
+        .then(m => m.UserFormComponent)
   },
   {
     path: '',
@@ -55,9 +55,15 @@ export const routes: Routes = [
         loadComponent: () =>
           import('../features/projects/project-list/project-list.component')
             .then(c => c.ProjectListComponent)
-      }
+      },
+      {
+        path: 'projects/create',
+        loadComponent: () =>
+          import('../features/projects/project-form/project-form.component')
+            .then(m => m.ProjectFormComponent)
+      },
 
     ]
 
-  }
+  },
 ];

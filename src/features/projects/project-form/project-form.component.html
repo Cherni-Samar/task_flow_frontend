@@ -1,0 +1,244 @@
+<div class="container project-form-page">
+
+  <div class="page-header">
+
+    <div>
+      <h1>
+        <i class="bi bi-folder-plus"></i>
+        Nouveau projet
+      </h1>
+
+      <p>
+        Créer un nouveau projet collaboratif
+      </p>
+    </div>
+
+    <button type="button" class="btn-secondary" (click)="cancel()">
+
+      <i class="bi bi-arrow-left"></i>
+      Retour
+
+    </button>
+
+  </div>
+
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+
+    {{ errorMessage }}
+
+  </div>
+
+
+  <form [formGroup]="projectForm" (ngSubmit)="submit()" class="project-form">
+
+
+    <!-- Informations générales -->
+    <section class="form-section">
+
+      <h2>
+        <i class="bi bi-info-circle"></i>
+        Informations générales
+      </h2>
+
+
+      <div class="form-group">
+
+        <label for="name">
+          Nom du projet
+        </label>
+
+        <input id="name" type="text" formControlName="name" placeholder="Exemple : Application TaskFlow">
+
+        <small *ngIf="
+            projectForm.get('name')?.touched &&
+            projectForm.get('name')?.invalid
+          " class="error-text">
+
+          Le nom du projet est obligatoire et doit contenir
+          au moins 3 caractères.
+
+        </small>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="description">
+          Description
+        </label>
+
+        <textarea id="description" rows="4" formControlName="description"
+          placeholder="Décrire les objectifs du projet...">
+        </textarea>
+
+        <small *ngIf="
+            projectForm.get('description')?.touched &&
+            projectForm.get('description')?.invalid
+          " class="error-text">
+
+          La description est obligatoire.
+
+        </small>
+
+      </div>
+
+    </section>
+
+
+    <!-- Dates et statut -->
+    <section class="form-section">
+
+      <h2>
+        <i class="bi bi-calendar-event"></i>
+        Planification
+      </h2>
+
+
+      <div class="form-row">
+
+        <div class="form-group">
+
+          <label for="startDate">
+            Date de début
+          </label>
+
+          <input id="startDate" type="date" formControlName="startDate">
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="endDate">
+            Date de fin
+          </label>
+
+          <input id="endDate" type="date" formControlName="endDate">
+
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="status">
+          Statut initial
+        </label>
+
+        <select id="status" formControlName="status">
+
+          <option *ngFor="let status of statuses" [value]="status.value">
+
+            {{ status.label }}
+
+          </option>
+
+        </select>
+
+      </div>
+
+    </section>
+
+
+    <!-- Affectation des utilisateurs -->
+    <section class="form-section">
+
+      <h2>
+        <i class="bi bi-people"></i>
+        Équipe du projet
+      </h2>
+
+
+      <div *ngIf="loadingUsers" class="alert alert-info">
+
+        Chargement des utilisateurs...
+
+      </div>
+
+      <div class="form-group" *ngIf="isAdmin">
+
+        <label for="managerId">
+          Chef de projet
+        </label>
+
+        <select id="managerId" formControlName="managerId">
+
+          <option [ngValue]="null">
+            Sélectionner un chef de projet
+          </option>
+
+          <option *ngFor="let manager of managers" [value]="manager.id">
+
+            {{ manager.fullName }} -
+            {{ manager.email }}
+
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div *ngIf="isManager && !isAdmin" class="alert alert-info">
+
+        <i class="bi bi-person-check"></i>
+
+        Vous serez automatiquement le chef de projet
+        de ce projet.
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="memberIds">
+          Membres du projet
+        </label>
+
+        <select id="memberIds" multiple formControlName="memberIds">
+
+          <option *ngFor="let collaborator of collaborators" [value]="collaborator.id">
+
+            {{ collaborator.fullName }} -
+            {{ collaborator.email }}
+
+          </option>
+
+        </select>
+
+        <small class="form-help">
+          Maintenez Ctrl pour sélectionner plusieurs collaborateurs.
+        </small>
+
+      </div>
+
+    </section>
+
+
+    <!-- Boutons -->
+    <div class="form-actions">
+
+      <button type="button" class="btn-secondary" (click)="cancel()">
+
+        Annuler
+
+      </button>
+
+
+      <button type="submit" class="btn-primary" [disabled]="loading">
+
+        <i class="bi bi-check-circle"></i>
+
+        {{ loading ? 'Création...' : 'Créer le projet' }}
+
+      </button>
+
+    </div>
+
+
+  </form>
+
+</div>

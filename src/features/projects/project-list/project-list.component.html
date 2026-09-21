@@ -1,181 +1,187 @@
 <div class="container">
 
+  <!-- En-tête de la page -->
+  <div class="header">
 
-<div class="header">
+    <div>
+      <h1>
+        <i class="bi bi-folder"></i>
+        Projets
+      </h1>
 
+      <p>
+        Gestion et suivi des projets
+      </p>
+    </div>
 
-<div>
+    <button class="btn-add" routerLink="/projects/create" [disabled]="!isAdmin && !isManager" >
 
-<h1>
-<i class="bi bi-folder"></i>
-Projets
-</h1>
+      <i class="bi bi-plus-circle"></i>
+      Ajouter un projet
+    </button>
 
+  </div>
 
-<p>
-Gestion et suivi des projets
-</p>
 
-</div>
+  <!-- Message de chargement -->
+  <div *ngIf="loading" class="alert alert-info">
 
+    <i class="bi bi-hourglass-split"></i>
+    Chargement des projets...
 
+  </div>
 
-<button 
-routerLink="/projects/create"
-class="btn-add">
 
-<i class="bi bi-plus-circle"></i>
+  <!-- Message d'erreur -->
+  <div *ngIf="errorMessage" class="alert alert-danger">
 
-Nouveau projet
+    <i class="bi bi-exclamation-triangle"></i>
+    {{ errorMessage }}
 
-</button>
+  </div>
 
 
-</div>
+  <!-- Aucun projet -->
+  <div *ngIf="!loading && projects.length === 0 && !errorMessage" class="empty-state">
 
+    <i class="bi bi-folder-x"></i>
 
+    <h2>
+      Aucun projet trouvé
+    </h2>
 
+    <p>
+      Commencez par créer votre premier projet.
+    </p>
 
+    <button routerLink="/projects/create" class="btn-add">
 
-<div class="project-grid">
+      <i class="bi bi-plus-circle"></i>
+      Créer un projet
 
+    </button>
 
+  </div>
 
-<div class="project-card"
-*ngFor="let project of projects">
 
+  <!-- Liste des projets -->
+  <div class="project-grid" *ngIf="!loading && projects.length > 0">
 
 
-<div class="card-header">
+    <!-- Carte d'un projet -->
+    <div class="project-card" *ngFor="let project of projects">
 
 
-<h2>
-{{project.name}}
-</h2>
+      <!-- En-tête de la carte -->
+      <div class="card-header">
 
+        <h2>
+          {{ project.name }}
+        </h2>
 
-<span 
-class="status"
-[class.done]="project.status==='TERMINE'"
-[class.progress]="project.status==='EN_COURS'">
+        <span class="status" [class.done]="project.status === 'TERMINE'"
+          [class.progress]="project.status === 'EN_COURS'" [class.planned]="project.status === 'PLANIFIE'"
+          [class.cancelled]="project.status === 'ANNULE'">
 
-{{project.status}}
+          {{ project.status }}
 
-</span>
+        </span>
 
+      </div>
 
-</div>
 
+      <!-- Description -->
+      <p class="description">
 
+        {{ project.description || 'Aucune description disponible.' }}
 
+      </p>
 
 
-<p class="description">
+      <!-- Informations du projet -->
+      <div class="info">
 
-{{project.description}}
+        <p>
 
-</p>
+          <i class="bi bi-person"></i>
 
+          Chef projet :
 
+          <strong>
+            {{ project.manager || 'Non affecté' }}
+          </strong>
 
+        </p>
 
-<div class="info">
 
+        <p>
 
-<p>
+          <i class="bi bi-calendar"></i>
 
-<i class="bi bi-person"></i>
+          {{ project.startDate | date:'dd/MM/yyyy' }}
 
-Chef projet :
+          -
 
-<strong>
-{{project.manager}}
-</strong>
+          {{ project.endDate | date:'dd/MM/yyyy' }}
 
-</p>
+        </p>
 
+      </div>
 
 
-<p>
+      <!-- Barre de progression -->
+      <div class="progress-box">
 
-<i class="bi bi-calendar"></i>
+        <div class="progress-bar">
 
-{{project.startDate}}
--
-{{project.endDate}}
+          <div class="progress-value" [style.width.%]="project.progress">
 
-</p>
+          </div>
 
+        </div>
 
-</div>
+        <span>
+          {{ project.progress }} %
+        </span>
 
+      </div>
 
 
+      <!-- Actions -->
+      <div class="actions">
 
 
+        <!-- Modifier -->
+        <button class="btn-edit" [routerLink]="['/projects/edit', project.id]" title="Modifier le projet" [disabled]="!isAdmin && !isManager">
 
-<div class="progress-box">
+          <i class="bi bi-pencil"></i>
 
+        </button>
 
-<div class="progress-bar">
 
+        <!-- Supprimer -->
+        <button class="btn-delete" (click)="deleteProject(project.id)" title="Supprimer le projet" [disabled]="!isAdmin && !isManager">
 
-<div 
-class="progress-value"
-[style.width.%]="project.progress">
+          <i class="bi bi-trash"></i>
 
-</div>
+        </button>
 
 
-</div>
+        <!-- Consulter -->
+        <button class="btn-view" [routerLink]="['/projects', project.id]" title="Consulter le projet">
 
+          <i class="bi bi-eye"></i>
 
-<span>
-{{project.progress}} %
-</span>
+        </button>
 
 
-</div>
+      </div>
 
 
+    </div>
 
 
-
-
-
-<div class="actions">
-
-
-<button class="btn-edit">
-
-<i class="bi bi-pencil"></i>
-
-</button>
-
-
-<button class="btn-delete">
-
-<i class="bi bi-trash"></i>
-
-</button>
-
-
-<button class="btn-view">
-
-<i class="bi bi-eye"></i>
-
-</button>
-
-
-</div>
-
-
-
-</div>
-
-
-
-</div>
+  </div>
 
 
 </div>

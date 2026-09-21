@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 
 import { ProjectService } from '../project.service';
 import {
   Project,
   ProjectStatus
 } from '../../../shared/models/project.model';
+import { UserService } from '../../users/user.service';
 
 @Component({
   selector: 'app-project-list',
@@ -22,15 +23,44 @@ export class ProjectListComponent implements OnInit {
 
   projects: any[] = [];
 
+  isAdmin = false;
+  isManager = false;
+
   loading = false;
   errorMessage = '';
 
   constructor(
-    private projectService: ProjectService
-  ) {}
+    private projectService: ProjectService, private userService: UserService, private router: Router, private cd: ChangeDetectorRef
+
+
+  ) { }
 
   ngOnInit(): void {
+    this.loadCurrentUser();
     this.loadProjects();
+  }
+
+
+  loadCurrentUser(): void {
+    this.userService.getCurrentUser().subscribe({
+      next: (user) => {
+        this.isAdmin = user.roles?.some(
+          role => role.name === 'ADMIN'
+        ) ?? false;
+
+        this.isManager = user.roles?.some(
+          role => role.name === 'MANAGER'
+        ) ?? false;
+
+        this.cd.detectChanges();
+
+      },
+      error: (err) => {
+        console.error('Erreur récupération utilisateur connecté', err);
+        this.isAdmin = false;
+        this.isManager = false;
+      }
+    });
   }
 
   /**
@@ -63,6 +93,8 @@ export class ProjectListComponent implements OnInit {
         }));
 
         this.loading = false;
+        this.cd.detectChanges();
+
       },
 
       error: (error) => {
@@ -75,9 +107,11 @@ export class ProjectListComponent implements OnInit {
           'Impossible de charger les projets.';
 
         this.loading = false;
+
       }
     });
   }
+
 
   /**
    * Convertir les statuts du backend vers ceux du HTML
@@ -100,6 +134,7 @@ export class ProjectListComponent implements OnInit {
         return status;
     }
   }
+
 
   /**
    * Calculer une progression approximative selon les dates
