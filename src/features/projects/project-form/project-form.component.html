@@ -13,10 +13,7 @@
       </p>
     </div>
 
-    <button
-      type="button"
-      class="btn-secondary"
-      (click)="cancel()">
+    <button type="button" class="btn-secondary" (click)="cancel()">
 
       <i class="bi bi-arrow-left"></i>
       Retour
@@ -26,19 +23,14 @@
   </div>
 
 
-  <div
-    *ngIf="errorMessage"
-    class="alert alert-danger">
+  <div *ngIf="errorMessage" class="alert alert-danger">
 
     {{ errorMessage }}
 
   </div>
 
 
-  <form
-    [formGroup]="projectForm"
-    (ngSubmit)="submit()"
-    class="project-form">
+  <form [formGroup]="projectForm" (ngSubmit)="submit()" class="project-form">
 
 
     <!-- Informations générales -->
@@ -56,18 +48,12 @@
           Nom du projet
         </label>
 
-        <input
-          id="name"
-          type="text"
-          formControlName="name"
-          placeholder="Exemple : Application TaskFlow">
+        <input id="name" type="text" formControlName="name" placeholder="Exemple : Application TaskFlow">
 
-        <small
-          *ngIf="
+        <small *ngIf="
             projectForm.get('name')?.touched &&
             projectForm.get('name')?.invalid
-          "
-          class="error-text">
+          " class="error-text">
 
           Le nom du projet est obligatoire et doit contenir
           au moins 3 caractères.
@@ -83,19 +69,14 @@
           Description
         </label>
 
-        <textarea
-          id="description"
-          rows="4"
-          formControlName="description"
+        <textarea id="description" rows="4" formControlName="description"
           placeholder="Décrire les objectifs du projet...">
         </textarea>
 
-        <small
-          *ngIf="
+        <small *ngIf="
             projectForm.get('description')?.touched &&
             projectForm.get('description')?.invalid
-          "
-          class="error-text">
+          " class="error-text">
 
           La description est obligatoire.
 
@@ -123,10 +104,7 @@
             Date de début
           </label>
 
-          <input
-            id="startDate"
-            type="date"
-            formControlName="startDate">
+          <input id="startDate" type="date" formControlName="startDate">
 
         </div>
 
@@ -137,10 +115,7 @@
             Date de fin
           </label>
 
-          <input
-            id="endDate"
-            type="date"
-            formControlName="endDate">
+          <input id="endDate" type="date" formControlName="endDate">
 
         </div>
 
@@ -153,13 +128,9 @@
           Statut initial
         </label>
 
-        <select
-          id="status"
-          formControlName="status">
+        <select id="status" formControlName="status">
 
-          <option
-            *ngFor="let status of statuses"
-            [value]="status.value">
+          <option *ngFor="let status of statuses" [value]="status.value">
 
             {{ status.label }}
 
@@ -181,32 +152,25 @@
       </h2>
 
 
-      <div
-        *ngIf="loadingUsers"
-        class="alert alert-info">
+      <div *ngIf="loadingUsers" class="alert alert-info">
 
         Chargement des utilisateurs...
 
       </div>
 
-
-      <div class="form-group">
+      <div class="form-group" *ngIf="isAdmin">
 
         <label for="managerId">
           Chef de projet
         </label>
 
-        <select
-          id="managerId"
-          formControlName="managerId">
+        <select id="managerId" formControlName="managerId">
 
           <option [ngValue]="null">
             Sélectionner un chef de projet
           </option>
 
-          <option
-            *ngFor="let manager of managers"
-            [value]="manager.id">
+          <option *ngFor="let manager of managers" [value]="manager.id">
 
             {{ manager.fullName }} -
             {{ manager.email }}
@@ -218,20 +182,25 @@
       </div>
 
 
+      <div *ngIf="isManager && !isAdmin" class="alert alert-info">
+
+        <i class="bi bi-person-check"></i>
+
+        Vous serez automatiquement le chef de projet
+        de ce projet.
+
+      </div>
+
+
       <div class="form-group">
 
         <label for="memberIds">
           Membres du projet
         </label>
 
-        <select
-          id="memberIds"
-          multiple
-          formControlName="memberIds">
+        <select id="memberIds" multiple formControlName="memberIds">
 
-          <option
-            *ngFor="let collaborator of collaborators"
-            [value]="collaborator.id">
+          <option *ngFor="let collaborator of collaborators" [value]="collaborator.id">
 
             {{ collaborator.fullName }} -
             {{ collaborator.email }}
@@ -252,20 +221,14 @@
     <!-- Boutons -->
     <div class="form-actions">
 
-      <button
-        type="button"
-        class="btn-secondary"
-        (click)="cancel()">
+      <button type="button" class="btn-secondary" (click)="cancel()">
 
         Annuler
 
       </button>
 
 
-      <button
-        type="submit"
-        class="btn-primary"
-        [disabled]="loading">
+      <button type="submit" class="btn-primary" [disabled]="loading">
 
         <i class="bi bi-check-circle"></i>
 

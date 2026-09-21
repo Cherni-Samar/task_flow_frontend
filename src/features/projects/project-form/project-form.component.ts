@@ -1,203 +1,531 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators
+    FormBuilder,
+    FormGroup,
+    ReactiveFormsModule,
+    Validators
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ChangeDetectorRef } from '@angular/core';
 
 import { ProjectService } from '../project.service';
 import { UserService } from '../../users/user.service';
 
 import {
-  CreateProjectRequest,
-  ProjectStatus
+    CreateProjectRequest
 } from '../../../shared/models/project.model';
 
 import { User } from '../../../shared/models/user.model';
 
 @Component({
-  selector: 'app-project-form',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule
-  ],
-  templateUrl: './project-form.component.html',
-  styleUrls: ['./project-form.component.css']
+    selector: 'app-project-form',
+    standalone: true,
+    imports: [
+        CommonModule,
+        ReactiveFormsModule
+    ],
+    templateUrl: './project-form.component.html',
+    styleUrls: ['./project-form.component.css']
 })
 export class ProjectFormComponent implements OnInit {
 
-  projectForm!: FormGroup;
+    // =========================================================
+    // FORMULAIRE
+    // =========================================================
 
-  users: User[] = [];
+    projectForm!: FormGroup;
 
-  loading = false;
-  loadingUsers = false;
-  errorMessage = '';
 
-  statuses = [
-    {
-      value: 'PLANNED',
-      label: 'Planifié'
-    },
-    {
-      value: 'IN_PROGRESS',
-      label: 'En cours'
-    },
-    {
-      value: 'COMPLETED',
-      label: 'Terminé'
-    },
-    {
-      value: 'CANCELLED',
-      label: 'Annulé'
-    }
-  ];
+    // =========================================================
+    // RÔLE DE L'UTILISATEUR CONNECTÉ
+    // =========================================================
 
-  constructor(
-    private fb: FormBuilder,
-    private projectService: ProjectService,
-    private userService: UserService,
-    private router: Router
-  ) {}
+    isAdmin = false;
+    isManager = false;
 
-  ngOnInit(): void {
-    this.initializeForm();
-    this.loadUsers();
-  }
 
-  initializeForm(): void {
-    this.projectForm = this.fb.group({
-      name: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(3)
-        ]
-      ],
+    // =========================================================
+    // UTILISATEUR CONNECTÉ
+    // =========================================================
 
-      description: [
-        '',
-        [
-          Validators.required
-        ]
-      ],
+    currentUser!: User;
 
-      startDate: [
-        '',
-        Validators.required
-      ],
 
-      endDate: [
-        '',
-        Validators.required
-      ],
+    // =========================================================
+    // UTILISATEURS
+    // =========================================================
 
-      status: [
-        'PLANNED',
-        Validators.required
-      ],
+    users: User[] = [];
 
-      managerId: [
-        null,
-        Validators.required
-      ],
 
-      memberIds: [
-        [],
-        Validators.required
-      ]
-    });
-  }
+    // =========================================================
+    // ÉTAT
+    // =========================================================
 
-  loadUsers(): void {
-    this.loadingUsers = true;
+    loading = false;
+    loadingUsers = false;
 
-    this.userService.getAll().subscribe({
-      next: (data: User[]) => {
-        this.users = data;
-        this.loadingUsers = false;
-      },
+    errorMessage = '';
 
-      error: (error) => {
-        console.error(
-          'Erreur lors du chargement des utilisateurs',
-          error
-        );
 
-        this.errorMessage =
-          'Impossible de charger les utilisateurs.';
+    // =========================================================
+    // STATUTS
+    // =========================================================
 
-        this.loadingUsers = false;
-      }
-    });
-  }
+    statuses = [
+        {
+            value: 'PLANNED',
+            label: 'Planifié'
+        },
+        {
+            value: 'IN_PROGRESS',
+            label: 'En cours'
+        },
+        {
+            value: 'COMPLETED',
+            label: 'Terminé'
+        },
+        {
+            value: 'CANCELLED',
+            label: 'Annulé'
+        }
+    ];
 
-  get collaborators(): User[] {
-    return this.users.filter(user =>
-      user.roles?.some(role =>
-        role.name === 'COLLABORATOR'
-      )
-    );
-  }
 
-  get managers(): User[] {
-    return this.users.filter(user =>
-      user.roles?.some(role =>
-        role.name === 'MANAGER'
-      )
-    );
-  }
+    // =========================================================
+    // CONSTRUCTOR
+    // =========================================================
 
-  submit(): void {
+    constructor(
+        private fb: FormBuilder,
+        private projectService: ProjectService,
+        private userService: UserService,
+        private router: Router,
+        private cd: ChangeDetectorRef
+    ) { }
 
-    if (this.projectForm.invalid) {
-      this.projectForm.markAllAsTouched();
-      return;
+
+    // =========================================================
+    // INIT
+    // =========================================================
+
+    ngOnInit(): void {
+
+        console.log('INIT PROJECT FORM');
+
+        this.initializeForm();
+
+        // Récupérer l'utilisateur connecté
+        this.loadCurrentUser();
+
+        // Récupérer tous les utilisateurs
+        this.loadUsers();
     }
 
-    this.loading = true;
-    this.errorMessage = '';
 
-    const formValue = this.projectForm.value;
+    // =========================================================
+    // UTILISATEUR CONNECTÉ
+    // =========================================================
 
-    const request: CreateProjectRequest = {
-      name: formValue.name,
-      description: formValue.description,
-      startDate: formValue.startDate,
-      endDate: formValue.endDate,
-      status: formValue.status,
-      managerId: Number(formValue.managerId),
-      memberIds: formValue.memberIds.map(
-        (id: number) => Number(id)
-      )
-    };
+    loadCurrentUser(): void {
 
-    this.projectService.createProject(request).subscribe({
-      next: () => {
-        this.loading = false;
-        this.router.navigate(['/projects']);
-      },
+        this.userService.getCurrentUser().subscribe({
 
-      error: (error) => {
-        console.error(
-          'Erreur lors de la création du projet',
-          error
+            next: (user) => {
+
+                this.currentUser = user;
+
+
+                // =================================================
+                // VÉRIFIER ADMIN
+                // =================================================
+
+                this.isAdmin = user.roles?.some(
+                    role => role.name === 'ADMIN'
+                ) ?? false;
+
+
+                // =================================================
+                // VÉRIFIER MANAGER
+                // =================================================
+
+                this.isManager = user.roles?.some(
+                    role => role.name === 'MANAGER'
+                ) ?? false;
+
+
+                console.log(
+                    'CURRENT USER:',
+                    user
+                );
+
+                console.log(
+                    'CURRENT USER ROLES:',
+                    user.roles
+                );
+
+                console.log(
+                    'IS ADMIN:',
+                    this.isAdmin
+                );
+
+                console.log(
+                    'IS MANAGER:',
+                    this.isManager
+                );
+
+
+                // =================================================
+                // SI MANAGER
+                // =================================================
+
+                if (this.isManager) {
+
+                    /*
+                     * Le Manager ne sélectionne pas de manager.
+                     *
+                     * Le backend utilisera automatiquement
+                     * l'utilisateur connecté comme manager.
+                     */
+
+                    this.projectForm.patchValue({
+                        managerId: null
+                    });
+                }
+
+
+                this.cd.detectChanges();
+            },
+
+
+            error: (err) => {
+
+                console.error(
+                    'Erreur récupération utilisateur connecté',
+                    err
+                );
+
+                this.isAdmin = false;
+                this.isManager = false;
+
+                this.errorMessage =
+                    'Impossible de récupérer l\'utilisateur connecté.';
+            }
+        });
+    }
+
+
+    // =========================================================
+    // FORMULAIRE
+    // =========================================================
+
+    initializeForm(): void {
+
+        this.projectForm = this.fb.group({
+
+            name: [
+                '',
+                [
+                    Validators.required,
+                    Validators.minLength(3)
+                ]
+            ],
+
+
+            description: [
+                '',
+                [
+                    Validators.required
+                ]
+            ],
+
+
+            startDate: [
+                '',
+                Validators.required
+            ],
+
+
+            endDate: [
+                '',
+                Validators.required
+            ],
+
+
+            status: [
+                'PLANNED',
+                Validators.required
+            ],
+
+
+            /*
+             * IMPORTANT :
+             *
+             * Pas de Validators.required ici.
+             *
+             * ADMIN :
+             * → sélectionne un Manager
+             *
+             * MANAGER :
+             * → devient automatiquement le Manager
+             */
+
+            managerId: [
+                null
+            ],
+
+
+            memberIds: [
+                [],
+                Validators.required
+            ]
+        });
+    }
+
+
+    // =========================================================
+    // CHARGER LES UTILISATEURS
+    // =========================================================
+
+    loadUsers(): void {
+
+        this.loadingUsers = true;
+
+        this.userService.getAll().subscribe({
+
+            next: (data: User[]) => {
+
+                this.users = data;
+
+                this.loadingUsers = false;
+
+                console.log(
+                    'USERS:',
+                    this.users
+                );
+            },
+
+
+            error: (error) => {
+
+                console.error(
+                    'Erreur lors du chargement des utilisateurs',
+                    error
+                );
+
+                this.errorMessage =
+                    'Impossible de charger les utilisateurs.';
+
+                this.loadingUsers = false;
+            }
+        });
+    }
+
+
+    // =========================================================
+    // COLLABORATEURS
+    // =========================================================
+
+    get collaborators(): User[] {
+
+        return this.users.filter(user =>
+            user.roles?.some(
+                role => role.name === 'COLLABORATOR'
+            )
+        );
+    }
+
+
+    // =========================================================
+    // MANAGERS
+    // =========================================================
+
+    get managers(): User[] {
+
+        return this.users.filter(user =>
+            user.roles?.some(
+                role => role.name === 'MANAGER'
+            )
+        );
+    }
+
+
+    // =========================================================
+    // SUBMIT
+    // =========================================================
+
+    submit(): void {
+
+        console.log(
+            'SUBMIT - IS ADMIN:',
+            this.isAdmin
         );
 
-        this.errorMessage =
-          error.error?.message ||
-          'Impossible de créer le projet.';
+        console.log(
+            'SUBMIT - IS MANAGER:',
+            this.isManager
+        );
 
-        this.loading = false;
-      }
-    });
-  }
 
-  cancel(): void {
-    this.router.navigate(['/projects']);
-  }
+        // =====================================================
+        // VÉRIFIER LE RÔLE
+        // =====================================================
+
+        if (!this.isAdmin && !this.isManager) {
+
+            this.errorMessage =
+                'Vous n\'avez pas l\'autorisation de créer un projet.';
+
+            return;
+        }
+
+
+        // =====================================================
+        // ADMIN → MANAGER OBLIGATOIRE
+        // =====================================================
+
+        if (this.isAdmin) {
+
+            const managerId =
+                this.projectForm.get('managerId')?.value;
+
+
+            if (!managerId) {
+
+                this.errorMessage =
+                    'Veuillez sélectionner un chef de projet.';
+
+                this.projectForm
+                    .get('managerId')
+                    ?.markAsTouched();
+
+                return;
+            }
+        }
+
+
+        // =====================================================
+        // VALIDATION FORMULAIRE
+        // =====================================================
+
+        if (this.projectForm.invalid) {
+
+            this.projectForm.markAllAsTouched();
+
+            return;
+        }
+
+
+        this.loading = true;
+
+        this.errorMessage = '';
+
+
+        const formValue =
+            this.projectForm.value;
+
+
+        // =====================================================
+        // CONSTRUIRE LA REQUÊTE
+        // =====================================================
+
+        const request: CreateProjectRequest = {
+
+            name: formValue.name,
+
+            description: formValue.description,
+
+            startDate: formValue.startDate,
+
+            endDate: formValue.endDate,
+
+            status: formValue.status,
+
+
+            /*
+             * ADMIN :
+             * → envoyer le managerId choisi
+             *
+             * MANAGER :
+             * → ne rien envoyer
+             *
+             * Le backend prendra automatiquement
+             * le Manager connecté.
+             */
+
+            ...(this.isAdmin && formValue.managerId
+                ? {
+                    managerId: Number(
+                        formValue.managerId
+                    )
+                }
+                : {}),
+
+
+            memberIds:
+                (formValue.memberIds || [])
+                    .map(
+                        (id: number) =>
+                            Number(id)
+                    )
+        };
+
+
+        console.log(
+            'REQUEST ENVOYÉE AU BACKEND:',
+            request
+        );
+
+
+        // =====================================================
+        // CRÉER LE PROJET
+        // =====================================================
+
+        this.projectService
+            .createProject(request)
+            .subscribe({
+
+                next: (project) => {
+
+                    console.log(
+                        'PROJET CRÉÉ:',
+                        project
+                    );
+
+                    this.loading = false;
+
+                    this.router.navigate(
+                        ['/projects']
+                    );
+                },
+
+
+                error: (error) => {
+
+                    console.error(
+                        'Erreur lors de la création du projet',
+                        error
+                    );
+
+                    this.errorMessage =
+                        error.error?.message ||
+                        'Impossible de créer le projet.';
+
+                    this.loading = false;
+                }
+            });
+    }
+
+
+    // =========================================================
+    // ANNULER
+    // =========================================================
+
+    cancel(): void {
+
+        this.router.navigate(
+            ['/projects']
+        );
+    }
 }

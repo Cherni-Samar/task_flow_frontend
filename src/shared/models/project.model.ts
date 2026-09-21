@@ -29,6 +29,6 @@ export interface CreateProjectRequest {
   startDate: string;
   endDate: string;
   status: ProjectStatus;
-  managerId: number;
+  managerId?: number;
   memberIds: number[];
 }
