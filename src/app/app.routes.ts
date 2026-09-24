@@ -62,6 +62,20 @@ export const routes: Routes = [
           import('../features/projects/project-form/project-form.component')
             .then(m => m.ProjectFormComponent)
       },
+      {
+        path: 'projects/edit/:id',
+        loadComponent: () =>
+          import('../features/projects/project-form/project-form.component')
+            .then(m => m.ProjectFormComponent)
+      },
+      {
+        path: 'projects/:id',
+        loadComponent: () =>
+          import('../features/projects/project-details/project-details.component')
+            .then(m => m.ProjectDetailsComponent)
+      },
+      
+
 
     ]
 

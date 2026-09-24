@@ -1,0 +1,434 @@
+<div class="details-container">
+
+  <!-- ========================= -->
+  <!-- Chargement -->
+  <!-- ========================= -->
+
+  <div
+    *ngIf="loading"
+    class="loading">
+
+    <i class="bi bi-hourglass-split"></i>
+
+    <p>
+      Chargement du projet...
+    </p>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- Erreur -->
+  <!-- ========================= -->
+
+  <div
+    *ngIf="!loading && errorMessage"
+    class="error-message">
+
+    <i class="bi bi-exclamation-triangle"></i>
+
+    <p>
+      {{ errorMessage }}
+    </p>
+
+    <button
+      class="btn-back"
+      (click)="goBack()">
+
+      <i class="bi bi-arrow-left"></i>
+
+      Retour aux projets
+
+    </button>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- Projet -->
+  <!-- ========================= -->
+
+  <div
+    *ngIf="!loading && project"
+    class="project-details">
+
+
+    <!-- ========================= -->
+    <!-- Header -->
+    <!-- ========================= -->
+
+    <div class="page-header">
+
+      <button
+        class="btn-back"
+        (click)="goBack()">
+
+        <i class="bi bi-arrow-left"></i>
+
+        Retour aux projets
+
+      </button>
+
+
+      <div class="header-actions">
+
+        <button
+          class="btn-edit"
+          (click)="editProject()">
+
+          <i class="bi bi-pencil"></i>
+
+          Modifier
+
+        </button>
+
+
+        <button
+          class="btn-delete"
+          (click)="deleteProject()">
+
+          <i class="bi bi-trash"></i>
+
+          Supprimer
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- Informations principales -->
+    <!-- ========================= -->
+
+    <div class="project-header-card">
+
+      <div class="project-title">
+
+        <div class="folder-icon">
+
+          <i class="bi bi-folder-fill"></i>
+
+        </div>
+
+        <div>
+
+          <h1>
+            {{ project.name }}
+          </h1>
+
+          <span
+            class="status"
+            [ngClass]="getStatusClass(project.status)">
+
+            {{ getStatusLabel(project.status) }}
+
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- Description -->
+    <!-- ========================= -->
+
+    <div class="card">
+
+      <div class="card-title">
+
+        <i class="bi bi-file-text"></i>
+
+        <h2>
+          Description
+        </h2>
+
+      </div>
+
+      <p class="description">
+
+        {{ project.description || 'Aucune description disponible.' }}
+
+      </p>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- Informations -->
+    <!-- ========================= -->
+
+    <div class="info-grid">
+
+
+      <!-- Chef de projet -->
+
+      <div class="card info-card">
+
+        <div class="card-title">
+
+          <i class="bi bi-person-badge"></i>
+
+          <h2>
+            Chef de projet
+          </h2>
+
+        </div>
+
+        <div
+          *ngIf="project.manager"
+          class="user-info">
+
+          <div class="avatar">
+
+            {{ project.manager.fullName.charAt(0).toUpperCase() }}
+
+          </div>
+
+          <div>
+
+            <strong>
+              {{ project.manager.fullName }}
+            </strong>
+
+            <span>
+              {{ project.manager.email }}
+            </span>
+
+          </div>
+
+        </div>
+
+        <p
+          *ngIf="!project.manager"
+          class="empty">
+
+          Aucun chef de projet affecté.
+
+        </p>
+
+      </div>
+
+
+      <!-- Dates -->
+
+      <div class="card info-card">
+
+        <div class="card-title">
+
+          <i class="bi bi-calendar3"></i>
+
+          <h2>
+            Dates du projet
+          </h2>
+
+        </div>
+
+        <div class="dates">
+
+          <div class="date-item">
+
+            <span>
+              Date de début
+            </span>
+
+            <strong>
+              {{ project.startDate | date:'dd/MM/yyyy' }}
+            </strong>
+
+          </div>
+
+          <div class="date-separator">
+            →
+          </div>
+
+          <div class="date-item">
+
+            <span>
+              Date de fin
+            </span>
+
+            <strong>
+              {{ project.endDate | date:'dd/MM/yyyy' }}
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- Membres -->
+    <!-- ========================= -->
+
+    <div class="card">
+
+      <div class="card-title">
+
+        <i class="bi bi-people"></i>
+
+        <h2>
+          Membres du projet
+        </h2>
+
+        <span class="member-count">
+          {{ project.members?.length || 0 }}
+        </span>
+
+      </div>
+
+
+      <div
+        *ngIf="project.members?.length"
+        class="members-list">
+
+        <div
+          class="member"
+          *ngFor="let member of project.members">
+
+          <div class="avatar">
+
+            {{ member.fullName.charAt(0).toUpperCase() }}
+
+          </div>
+
+          <div class="member-info">
+
+            <strong>
+              {{ member.fullName }}
+            </strong>
+
+            <span>
+              {{ member.email }}
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div
+        *ngIf="!project.members?.length"
+        class="empty-members">
+
+        <i class="bi bi-person-x"></i>
+
+        <p>
+          Aucun membre affecté à ce projet.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- Progression -->
+    <!-- ========================= -->
+
+    <div class="card progress-card">
+
+      <div class="progress-header">
+
+        <div class="card-title">
+
+          <i class="bi bi-bar-chart"></i>
+
+          <h2>
+            Progression du projet
+          </h2>
+
+        </div>
+
+        <strong class="progress-number">
+          {{ project.progress || 0 }}%
+        </strong>
+
+      </div>
+
+
+      <div class="progress-bar">
+
+        <div
+          class="progress-value"
+          [style.width.%]="project.progress || 0">
+
+        </div>
+
+      </div>
+
+      <div class="progress-labels">
+
+        <span>
+          Début :
+          {{ project.startDate | date:'dd/MM/yyyy' }}
+        </span>
+
+        <span>
+          Fin :
+          {{ project.endDate | date:'dd/MM/yyyy' }}
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- Actions bas de page -->
+    <!-- ========================= -->
+
+    <div class="bottom-actions">
+
+      <button
+        class="btn-back"
+        (click)="goBack()">
+
+        <i class="bi bi-arrow-left"></i>
+
+        Retour aux projets
+
+      </button>
+
+
+      <div>
+
+        <button
+          class="btn-edit"
+          (click)="editProject()">
+
+          <i class="bi bi-pencil"></i>
+
+          Modifier
+
+        </button>
+
+
+        <button
+          class="btn-delete"
+          (click)="deleteProject()">
+
+          <i class="bi bi-trash"></i>
+
+          Supprimer
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+</div>

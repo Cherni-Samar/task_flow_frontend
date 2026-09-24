@@ -6,7 +6,7 @@ import {
     ReactiveFormsModule,
     Validators
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
 
 import { ProjectService } from '../project.service';
@@ -35,6 +35,9 @@ export class ProjectFormComponent implements OnInit {
     // =========================================================
 
     projectForm!: FormGroup;
+
+    isEditMode = false;
+    projectId: number | null = null;
 
 
     // =========================================================
@@ -102,7 +105,8 @@ export class ProjectFormComponent implements OnInit {
         private projectService: ProjectService,
         private userService: UserService,
         private router: Router,
-        private cd: ChangeDetectorRef
+        private cd: ChangeDetectorRef,
+        private route: ActivatedRoute
     ) { }
 
 
@@ -121,6 +125,15 @@ export class ProjectFormComponent implements OnInit {
 
         // Récupérer tous les utilisateurs
         this.loadUsers();
+
+        const idParam = this.route.snapshot.paramMap.get('id');
+
+        if (idParam) {
+            this.isEditMode = true;
+            this.projectId = Number(idParam);
+
+            this.loadProjectForEdit(this.projectId);
+        }
     }
 
 
@@ -359,164 +372,94 @@ export class ProjectFormComponent implements OnInit {
 
     submit(): void {
 
-        console.log(
-            'SUBMIT - IS ADMIN:',
-            this.isAdmin
-        );
-
-        console.log(
-            'SUBMIT - IS MANAGER:',
-            this.isManager
-        );
-
-
-        // =====================================================
-        // VÉRIFIER LE RÔLE
-        // =====================================================
-
-        if (!this.isAdmin && !this.isManager) {
-
-            this.errorMessage =
-                'Vous n\'avez pas l\'autorisation de créer un projet.';
-
-            return;
-        }
-
-
-        // =====================================================
-        // ADMIN → MANAGER OBLIGATOIRE
-        // =====================================================
-
-        if (this.isAdmin) {
-
-            const managerId =
-                this.projectForm.get('managerId')?.value;
-
-
-            if (!managerId) {
-
-                this.errorMessage =
-                    'Veuillez sélectionner un chef de projet.';
-
-                this.projectForm
-                    .get('managerId')
-                    ?.markAsTouched();
-
-                return;
-            }
-        }
-
-
-        // =====================================================
-        // VALIDATION FORMULAIRE
-        // =====================================================
-
         if (this.projectForm.invalid) {
-
             this.projectForm.markAllAsTouched();
-
             return;
         }
 
+        const formValue = this.projectForm.value;
 
-        this.loading = true;
-
-        this.errorMessage = '';
-
-
-        const formValue =
-            this.projectForm.value;
-
-
-        // =====================================================
-        // CONSTRUIRE LA REQUÊTE
-        // =====================================================
-
-        const request: CreateProjectRequest = {
-
+        const projectData: CreateProjectRequest = {
             name: formValue.name,
-
             description: formValue.description,
-
             startDate: formValue.startDate,
-
             endDate: formValue.endDate,
-
             status: formValue.status,
-
-
-            /*
-             * ADMIN :
-             * → envoyer le managerId choisi
-             *
-             * MANAGER :
-             * → ne rien envoyer
-             *
-             * Le backend prendra automatiquement
-             * le Manager connecté.
-             */
-
-            ...(this.isAdmin && formValue.managerId
-                ? {
-                    managerId: Number(
-                        formValue.managerId
-                    )
-                }
-                : {}),
-
-
-            memberIds:
-                (formValue.memberIds || [])
-                    .map(
-                        (id: number) =>
-                            Number(id)
-                    )
+            managerId: formValue.managerId,
+            memberIds: formValue.memberIds ?? []
         };
 
+        console.log('📤 DONNÉES ENVOYÉES :', projectData);
 
-        console.log(
-            'REQUEST ENVOYÉE AU BACKEND:',
-            request
-        );
+        if (this.isEditMode && this.projectId) {
 
+            // UPDATE
+            this.projectService
+                .updateProject(this.projectId, projectData)
+                .subscribe({
 
-        // =====================================================
-        // CRÉER LE PROJET
-        // =====================================================
+                    next: (updatedProject) => {
 
-        this.projectService
-            .createProject(request)
-            .subscribe({
+                        console.log(
+                            '✅ PROJET MODIFIÉ :',
+                            updatedProject
+                        );
 
-                next: (project) => {
+                        alert('Projet modifié avec succès.');
 
-                    console.log(
-                        'PROJET CRÉÉ:',
-                        project
-                    );
+                        this.router.navigate([
+                            '/projects',
+                            this.projectId
+                        ]);
+                    },
 
-                    this.loading = false;
+                    error: (error) => {
 
-                    this.router.navigate(
-                        ['/projects']
-                    );
-                },
+                        console.error(
+                            '❌ Erreur modification :',
+                            error
+                        );
 
+                        alert(
+                            error.error?.message ||
+                            'Impossible de modifier le projet.'
+                        );
+                    }
+                });
 
-                error: (error) => {
+        } else {
 
-                    console.error(
-                        'Erreur lors de la création du projet',
-                        error
-                    );
+            // CREATE
+            this.projectService
+                .createProject(projectData)
+                .subscribe({
 
-                    this.errorMessage =
-                        error.error?.message ||
-                        'Impossible de créer le projet.';
+                    next: (project) => {
 
-                    this.loading = false;
-                }
-            });
+                        console.log(
+                            '✅ PROJET CRÉÉ :',
+                            project
+                        );
+
+                        alert('Projet créé avec succès.');
+
+                        this.router.navigate(['/projects']);
+                    },
+
+                    error: (error) => {
+
+                        console.error(
+                            '❌ Erreur création :',
+                            error
+                        );
+
+                        alert(
+                            error.error?.message ||
+                            'Impossible de créer le projet.'
+                        );
+                    }
+                });
+        }
     }
 
 
@@ -529,5 +472,37 @@ export class ProjectFormComponent implements OnInit {
         this.router.navigate(
             ['/projects']
         );
+    }
+
+    loadProjectForEdit(id: number): void {
+
+        this.projectService.getProjectById(id).subscribe({
+            next: (project) => {
+
+                console.log('✅ PROJET À MODIFIER :', project);
+
+                this.projectForm.patchValue({
+                    name: project.name,
+                    description: project.description,
+                    startDate: project.startDate,
+                    endDate: project.endDate,
+                    status: project.status,
+                    managerId: project.manager?.id ?? null,
+                    memberIds: project.members?.map(member => member.id) ?? []
+                });
+
+                this.cd.detectChanges();
+            },
+
+            error: (error) => {
+                console.error(
+                    '❌ Erreur chargement projet :',
+                    error
+                );
+
+                alert('Impossible de charger le projet.');
+                this.router.navigate(['/projects']);
+            }
+        });
     }
 }

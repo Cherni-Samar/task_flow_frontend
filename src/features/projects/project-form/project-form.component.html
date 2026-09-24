@@ -5,11 +5,12 @@
     <div>
       <h1>
         <i class="bi bi-folder-plus"></i>
-        Nouveau projet
+        {{ isEditMode ? 'Modifier le projet' : 'Créer un projet' }}
+
       </h1>
 
       <p>
-        Créer un nouveau projet collaboratif
+        Un projet collaboratif
       </p>
     </div>
 
@@ -228,12 +229,11 @@
       </button>
 
 
-      <button type="submit" class="btn-primary" [disabled]="loading">
+      <button type="submit" class="btn-primary">
+        <i class="bi" [class.bi-check-circle]="!isEditMode" [class.bi-pencil]="isEditMode">
+        </i>
 
-        <i class="bi bi-check-circle"></i>
-
-        {{ loading ? 'Création...' : 'Créer le projet' }}
-
+        {{ isEditMode ? 'Enregistrer les modifications' : 'Créer le projet' }}
       </button>
 
     </div>
