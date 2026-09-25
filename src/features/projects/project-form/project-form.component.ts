@@ -193,17 +193,10 @@ export class ProjectFormComponent implements OnInit {
                 // SI MANAGER
                 // =================================================
 
-                if (this.isManager) {
-
-                    /*
-                     * Le Manager ne sélectionne pas de manager.
-                     *
-                     * Le backend utilisera automatiquement
-                     * l'utilisateur connecté comme manager.
-                     */
+                if (this.isManager && !this.isAdmin) {
 
                     this.projectForm.patchValue({
-                        managerId: null
+                        managerId: this.currentUser.id
                     });
                 }
 
@@ -480,6 +473,8 @@ export class ProjectFormComponent implements OnInit {
             next: (project) => {
 
                 console.log('✅ PROJET À MODIFIER :', project);
+                console.log('👤 MANAGER DU PROJET :', project.manager);
+                console.log('🆔 MANAGER ID :', project.manager?.id);
 
                 this.projectForm.patchValue({
                     name: project.name,
@@ -490,6 +485,11 @@ export class ProjectFormComponent implements OnInit {
                     managerId: project.manager?.id ?? null,
                     memberIds: project.members?.map(member => member.id) ?? []
                 });
+
+                console.log(
+                    '📋 FORMULAIRE APRÈS CHARGEMENT :',
+                    this.projectForm.value
+                );
 
                 this.cd.detectChanges();
             },
