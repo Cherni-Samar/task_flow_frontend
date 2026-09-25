@@ -478,3 +478,222 @@
     width: 100%;
   }
 }
+.members-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.members-header label {
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+.selected-count {
+  font-size: 13px;
+  color: #666;
+  background: #f1f3f5;
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+
+
+/* Zone contenant les collaborateurs */
+.collaborators-container {
+  border: 1px solid #e1e5ea;
+  border-radius: 12px;
+  padding: 15px;
+  background: #fafbfc;
+
+  /*
+   * Important pour une grande liste
+   */
+  max-height: 380px;
+  overflow-y: auto;
+}
+
+
+/* Grille */
+.collaborators-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fill, minmax(280px, 1fr));
+
+  gap: 12px;
+}
+
+
+/* Carte collaborateur */
+.collaborator-card {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 14px;
+
+  background: white;
+
+  border: 2px solid #e5e7eb;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+
+/* Cacher la vraie checkbox */
+.collaborator-card input[type="checkbox"] {
+  position: absolute;
+
+  opacity: 0;
+
+  width: 0;
+  height: 0;
+}
+
+
+/* Hover */
+.collaborator-card:hover {
+  border-color: #b8c2cc;
+
+  background: #f8fafc;
+
+  transform: translateY(-1px);
+}
+
+
+/* Carte sélectionnée */
+.collaborator-card.selected {
+  border-color: #4f46e5;
+
+  background: #f5f3ff;
+
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.12);
+}
+
+
+/* Avatar */
+.collaborator-avatar {
+  width: 42px;
+  height: 42px;
+
+  min-width: 42px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #eef2ff;
+
+  color: #4f46e5;
+
+  font-weight: 700;
+
+  font-size: 16px;
+}
+
+
+/* Avatar sélectionné */
+.collaborator-card.selected .collaborator-avatar {
+  background: #4f46e5;
+  color: white;
+}
+
+
+/* Informations */
+.collaborator-info {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+
+  min-width: 0;
+
+  flex: 1;
+}
+
+.collaborator-info strong {
+  font-size: 14px;
+
+  color: #222;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.collaborator-info span {
+  font-size: 12px;
+
+  color: #777;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+/* Icône de sélection */
+.selection-icon {
+  font-size: 20px;
+
+  color: #cbd5e1;
+}
+
+.collaborator-card.selected .selection-icon {
+  color: #4f46e5;
+}
+
+
+/* Scrollbar */
+.collaborators-container::-webkit-scrollbar {
+  width: 7px;
+}
+
+.collaborators-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+
+  border-radius: 10px;
+}
+
+.collaborators-container::-webkit-scrollbar-thumb {
+  background: #c7cbd1;
+
+  border-radius: 10px;
+}
+
+.collaborators-container::-webkit-scrollbar-thumb:hover {
+  background: #aeb4bc;
+}
+
+
+/* Mobile */
+@media (max-width: 700px) {
+
+  .collaborators-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .collaborators-container {
+    max-height: 320px;
+  }
+}

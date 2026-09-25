@@ -14,7 +14,7 @@
       </p>
     </div>
 
-    <button class="btn-add" routerLink="/projects/create" [disabled]="!isAdmin && !isManager" >
+    <button class="btn-add" routerLink="/projects/create" [disabled]="!isAdmin && !isManager">
 
       <i class="bi bi-plus-circle"></i>
       Ajouter un projet
@@ -108,7 +108,7 @@
           Chef projet :
 
           <strong>
-            {{ project.manager || 'Non affecté' }}
+            {{ project.manager?.fullName  || 'Non affecté' }}
           </strong>
 
         </p>
@@ -150,17 +150,17 @@
       <!-- Actions -->
       <div class="actions">
 
-
         <!-- Modifier -->
-        <button class="btn-edit" [routerLink]="['/projects/edit', project.id]" title="Modifier le projet" [disabled]="!isAdmin && !isManager">
+        <button *ngIf="canEditProject(project)" class="btn-edit" [routerLink]="['/projects/edit', project.id]"
+          title="Modifier le projet">
 
           <i class="bi bi-pencil"></i>
 
         </button>
 
 
-        <!-- Supprimer -->
-        <button class="btn-delete" (click)="deleteProject(project.id)" title="Supprimer le projet" [disabled]="!isAdmin && !isManager">
+        <!-- Supprimer : ADMIN uniquement -->
+        <button *ngIf="isAdmin" class="btn-delete" (click)="deleteProject(project.id)" title="Supprimer le projet">
 
           <i class="bi bi-trash"></i>
 
@@ -173,7 +173,6 @@
           <i class="bi bi-eye"></i>
 
         </button>
-
 
       </div>
 

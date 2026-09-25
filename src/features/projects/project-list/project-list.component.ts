@@ -8,6 +8,7 @@ import {
   ProjectStatus
 } from '../../../shared/models/project.model';
 import { UserService } from '../../users/user.service';
+import { User } from '../../../shared/models/user.model';
 
 @Component({
   selector: 'app-project-list',
@@ -23,6 +24,7 @@ export class ProjectListComponent implements OnInit {
 
   projects: any[] = [];
 
+  currentUser!: User;
   isAdmin = false;
   isManager = false;
 
@@ -44,6 +46,9 @@ export class ProjectListComponent implements OnInit {
   loadCurrentUser(): void {
     this.userService.getCurrentUser().subscribe({
       next: (user) => {
+
+        this.currentUser = user;
+
         this.isAdmin = user.roles?.some(
           role => role.name === 'ADMIN'
         ) ?? false;
@@ -76,11 +81,9 @@ export class ProjectListComponent implements OnInit {
         this.projects = data.map(project => ({
           ...project,
 
-          // Le backend retourne un objet manager
-          // mais le HTML attend un texte
-          manager: project.manager?.fullName ?? 'Non affecté',
+          // Garder l'objet manager avec son id
+          manager: project.manager,
 
-          // Le backend retourne PLANNED, IN_PROGRESS...
           // Conversion vers les statuts utilisés dans le design
           status: this.convertStatus(project.status),
 
@@ -92,14 +95,15 @@ export class ProjectListComponent implements OnInit {
           )
         }));
 
+        console.log('✅ PROJETS CHARGÉS :', this.projects);
+
         this.loading = false;
         this.cd.detectChanges();
-
       },
 
       error: (error) => {
         console.error(
-          'Erreur lors du chargement des projets :',
+          '❌ Erreur lors du chargement des projets :',
           error
         );
 
@@ -107,7 +111,7 @@ export class ProjectListComponent implements OnInit {
           'Impossible de charger les projets.';
 
         this.loading = false;
-
+        this.cd.detectChanges();
       }
     });
   }
@@ -236,5 +240,32 @@ export class ProjectListComponent implements OnInit {
     }
 
     console.log('Consultation du projet :', id);
+  }
+
+  canEditProject(project: Project): boolean {
+
+    console.log('==============================');
+    console.log('Projet:', project.name);
+    console.log('Manager:', project.manager);
+    console.log('Manager ID:', project.manager?.id);
+    console.log('Current User:', this.currentUser);
+    console.log('Current User ID:', this.currentUser?.id);
+    console.log('isAdmin:', this.isAdmin);
+    console.log('isManager:', this.isManager);
+
+    if (this.isAdmin) {
+      return true;
+    }
+
+    if (this.isManager) {
+      return Number(project.manager?.id) === Number(this.currentUser?.id);
+    }
+
+    return false;
+  }
+  canDeleteProject(): boolean {
+
+    return this.isAdmin;
+
   }
 }
