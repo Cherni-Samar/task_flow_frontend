@@ -195,26 +195,136 @@
 
       <div class="form-group">
 
-        <label for="memberIds">
-          Membres du projet
-        </label>
+  <div class="members-header">
+    <label>
+      Membres du projet
+    </label>
 
-        <select id="memberIds" multiple formControlName="memberIds">
+    <span class="selected-count">
+      {{ selectedCollaboratorIds.length }} sélectionné(s)
+    </span>
+  </div>
 
-          <option *ngFor="let collaborator of collaborators" [value]="collaborator.id">
 
-            {{ collaborator.fullName }} -
-            {{ collaborator.email }}
+  <!-- Membres sélectionnés -->
+  <div
+    class="selected-members"
+    *ngIf="selectedCollaboratorIds.length > 0"
+  >
 
-          </option>
+    <div
+      class="selected-member"
+      *ngFor="let collaborator of selectedCollaborators"
+    >
 
-        </select>
+      <div class="member-avatar">
+        {{ collaborator.fullName.charAt(0).toUpperCase() }}
+      </div>
 
-        <small class="form-help">
-          Maintenez Ctrl pour sélectionner plusieurs collaborateurs.
+      <div class="member-info">
+        <strong>{{ collaborator.fullName }}</strong>
+        <small>{{ collaborator.email }}</small>
+      </div>
+
+      <button
+        type="button"
+        class="remove-member"
+        (click)="toggleCollaborator(collaborator.id)"
+        title="Retirer"
+      >
+        <i class="bi bi-x"></i>
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- Recherche -->
+  <div class="search-members">
+
+    <i class="bi bi-search"></i>
+
+    <input
+      type="text"
+      [(ngModel)]="collaboratorSearch"
+      [ngModelOptions]="{standalone: true}"
+      placeholder="Rechercher un collaborateur..."
+    >
+
+    <button
+      *ngIf="collaboratorSearch"
+      type="button"
+      class="clear-search"
+      (click)="collaboratorSearch = ''"
+    >
+      <i class="bi bi-x"></i>
+    </button>
+
+  </div>
+
+
+  <!-- Résultats -->
+  <div class="collaborators-results">
+
+    <label
+      class="collaborator-result"
+      *ngFor="let collaborator of filteredCollaborators"
+    >
+
+      <input
+        type="checkbox"
+        [checked]="isCollaboratorSelected(collaborator.id)"
+        (change)="toggleCollaborator(collaborator.id)"
+      >
+
+      <div class="member-avatar">
+        {{ collaborator.fullName.charAt(0).toUpperCase() }}
+      </div>
+
+      <div class="member-info">
+
+        <strong>
+          {{ collaborator.fullName }}
+        </strong>
+
+        <small>
+          {{ collaborator.email }}
         </small>
 
       </div>
+
+      <i
+        class="bi"
+        [class.bi-check-circle-fill]="isCollaboratorSelected(collaborator.id)"
+        [class.bi-circle]="!isCollaboratorSelected(collaborator.id)"
+      ></i>
+
+    </label>
+
+
+    <!-- Aucun résultat -->
+    <div
+      class="no-results"
+      *ngIf="filteredCollaborators.length === 0"
+    >
+
+      <i class="bi bi-person-x"></i>
+
+      <span>
+        Aucun collaborateur trouvé
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <small class="form-help">
+    Recherchez et sélectionnez un ou plusieurs collaborateurs.
+  </small>
+
+</div>
 
     </section>
 
