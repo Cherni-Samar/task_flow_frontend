@@ -1,48 +1,56 @@
-.sidebar{
+.sidebar {
 
-    width:240px;
+    width: 240px;
 
-    height:100vh;
+    height: 100vh;
 
-    background:#1f2937;
+    background: #1f2937;
 
-    padding-top:20px;
+    padding-top: 20px;
 
-}
+    position: fixed;
+    top: 0;
+    left: 0;
 
+    z-index: 1000;
 
-
-.menu a{
-
-    display:block;
-
-    color:white;
-
-    padding:15px 20px;
-
-    text-decoration:none;
+    overflow-y: auto;
 
 }
 
 
 
-.menu a:hover{
+.menu a {
 
-    background:#374151;
+    display: block;
+
+    color: white;
+
+    padding: 15px 20px;
+
+    text-decoration: none;
+
+}
+
+
+
+.menu a:hover {
+
+    background: #374151;
 
 }
 
 
 
-.active{
+.active {
 
-    background:#2563eb;
+    background: #2563eb;
 
 }
 
 
-i{
+i {
 
-    margin-right:10px;
+    margin-right: 10px;
 
 }

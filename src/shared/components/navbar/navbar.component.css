@@ -1,7 +1,5 @@
 .navbar {
-
     height: 65px;
-
     width: 100%;
 
     background: linear-gradient(
@@ -11,9 +9,7 @@
     );
 
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
 
     padding: 0 30px;
@@ -22,6 +18,14 @@
 
     box-shadow: 0 3px 10px rgba(0,0,0,0.15);
 
+    /* FIXED */
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    z-index: 1000;
+
+    box-sizing: border-box;
 }
 
 

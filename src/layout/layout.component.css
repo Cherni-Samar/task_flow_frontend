@@ -1,18 +1,42 @@
-.content{
+.content {
+    display: flex;
 
-    display:flex;
+    /* Laisse la place au navbar */
+    padding-top: 65px;
 
+    min-height: 100vh;
 }
 
 
-main{
+/* SIDEBAR */
 
-    flex:1;
+app-sidebar {
+    width: 260px;
+    min-width: 260px;
 
-    padding:20px;
+    position: fixed;
 
-    background:#f8f9fa;
+    top: 65px;
+    left: 0;
 
-    min-height:calc(100vh - 60px);
+    height: calc(100vh - 65px);
 
+    z-index: 900;
+}
+
+
+/* CONTENU */
+
+.main-content {
+    margin-left: 260px;
+
+    flex: 1;
+
+    min-width: 0;
+
+    min-height: calc(100vh - 65px);
+
+    padding: 25px;
+
+    box-sizing: border-box;
 }
