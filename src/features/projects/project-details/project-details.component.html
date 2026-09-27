@@ -306,12 +306,9 @@
 
         </div>
 
-        <button class="btn-add-task" (click)="addTask()">
-
+        <button *ngIf="canCreateTask" class="btn-add-task" (click)="addTask()">
           <i class="bi bi-plus-lg"></i>
-
           Ajouter une tâche
-
         </button>
 
       </div>
@@ -341,11 +338,12 @@
 
       <!-- Aucune tâche -->
 
+      <!-- Aucune tâche -->
       <div *ngIf="
-      !tasksLoading &&
-      !tasksError &&
-      tasks.length === 0
-    " class="empty-tasks">
+    !tasksLoading &&
+    !tasksError &&
+    tasks.length === 0
+  " class="empty-tasks">
 
         <i class="bi bi-check2-square"></i>
 
@@ -353,17 +351,28 @@
           Aucune tâche
         </h3>
 
-        <p>
-          Aucune tâche n'a encore été créée pour ce projet.
-        </p>
+        <!-- ADMIN ou manager du projet -->
+        <ng-container *ngIf="canCreateTask; else noTaskCreation">
 
-        <button class="btn-add-task" (click)="addTask()">
+          <p>
+            Aucune tâche n'a encore été créée pour ce projet.
+          </p>
 
-          <i class="bi bi-plus-lg"></i>
+          <button class="btn-add-task" (click)="addTask()">
+            <i class="bi bi-plus-lg"></i>
+            Créer la première tâche
+          </button>
 
-          Créer la première tâche
+        </ng-container>
 
-        </button>
+        <!-- Collaborateur ou autre manager -->
+        <ng-template #noTaskCreation>
+
+          <p>
+            Aucune tâche n'a encore été créée pour ce projet.
+          </p>
+
+        </ng-template>
 
       </div>
 
