@@ -4,6 +4,8 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { ProjectService } from '../project.service';
 import { Project } from '../../../shared/models/project.model';
+import { Task, TaskStatus, TaskPriority } from '../../../shared/models/task.model';
+import { TaskService } from '../../tasks/task.service';
 
 @Component({
     selector: 'app-project-details',
@@ -22,10 +24,18 @@ export class ProjectDetailsComponent implements OnInit {
     loading = true;
     errorMessage = '';
 
+    tasks: Task[] = [];
+    tasksLoading = false;
+    tasksError = '';
+
+    TaskStatus = TaskStatus;
+    TaskPriority = TaskPriority;
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private projectService: ProjectService,
+        private taskService: TaskService,
         private cd: ChangeDetectorRef
     ) { }
 
@@ -71,6 +81,8 @@ export class ProjectDetailsComponent implements OnInit {
                     )
                 };
 
+                this.loadTasks(data.id!);
+
                 this.loading = false;
 
                 console.log('📦 project =', this.project);
@@ -96,6 +108,120 @@ export class ProjectDetailsComponent implements OnInit {
         });
     }
 
+    loadTasks(projectId: number): void {
+
+        this.tasksLoading = true;
+        this.tasksError = '';
+
+        this.taskService
+            .getTasksByProject(projectId)
+            .subscribe({
+
+                next: (data) => {
+
+                    console.log(
+                        '✅ TÂCHES DU PROJET :',
+                        data
+                    );
+
+                    this.tasks = data;
+                    this.tasksLoading = false;
+
+                    this.cd.detectChanges();
+                },
+
+                error: (error) => {
+
+                    console.error(
+                        '❌ Erreur chargement tâches :',
+                        error
+                    );
+
+                    this.tasksError =
+                        'Impossible de charger les tâches du projet.';
+
+                    this.tasksLoading = false;
+
+                    this.cd.detectChanges();
+                }
+            });
+    }
+
+    addTask(): void {
+
+        if (!this.project?.id) {
+            return;
+        }
+
+        this.router.navigate([
+            '/projects',
+            this.project.id,
+            'tasks',
+            'create'
+        ]);
+    }
+
+    getTaskStatusLabel(status: TaskStatus): string {
+
+        switch (status) {
+
+            case TaskStatus.TODO:
+                return 'À faire';
+
+            case TaskStatus.IN_PROGRESS:
+                return 'En cours';
+
+            case TaskStatus.COMPLETED:
+                return 'Terminée';
+
+            case TaskStatus.OVERDUE:
+                return 'En retard';
+
+            default:
+                return status;
+        }
+    }
+
+    getTaskStatusClass(status: TaskStatus): string {
+
+        switch (status) {
+
+            case TaskStatus.TODO:
+                return 'todo';
+
+            case TaskStatus.IN_PROGRESS:
+                return 'in-progress';
+
+            case TaskStatus.COMPLETED:
+                return 'completed';
+
+            case TaskStatus.OVERDUE:
+                return 'overdue';
+
+            default:
+                return '';
+        }
+    }
+    getTaskPriorityLabel(priority: TaskPriority): string {
+
+        switch (priority) {
+
+            case TaskPriority.LOW:
+                return 'Faible';
+
+            case TaskPriority.MEDIUM:
+                return 'Moyenne';
+
+            case TaskPriority.HIGH:
+                return 'Élevée';
+
+            case TaskPriority.URGENT:
+                return 'Urgente';
+
+            default:
+                return priority;
+        }
+    }
     /**
      * Calcul de la progression selon les dates
      */

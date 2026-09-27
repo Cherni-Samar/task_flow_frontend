@@ -4,9 +4,7 @@
   <!-- Chargement -->
   <!-- ========================= -->
 
-  <div
-    *ngIf="loading"
-    class="loading">
+  <div *ngIf="loading" class="loading">
 
     <i class="bi bi-hourglass-split"></i>
 
@@ -21,9 +19,7 @@
   <!-- Erreur -->
   <!-- ========================= -->
 
-  <div
-    *ngIf="!loading && errorMessage"
-    class="error-message">
+  <div *ngIf="!loading && errorMessage" class="error-message">
 
     <i class="bi bi-exclamation-triangle"></i>
 
@@ -31,9 +27,7 @@
       {{ errorMessage }}
     </p>
 
-    <button
-      class="btn-back"
-      (click)="goBack()">
+    <button class="btn-back" (click)="goBack()">
 
       <i class="bi bi-arrow-left"></i>
 
@@ -48,9 +42,7 @@
   <!-- Projet -->
   <!-- ========================= -->
 
-  <div
-    *ngIf="!loading && project"
-    class="project-details">
+  <div *ngIf="!loading && project" class="project-details">
 
 
     <!-- ========================= -->
@@ -59,9 +51,7 @@
 
     <div class="page-header">
 
-      <button
-        class="btn-back"
-        (click)="goBack()">
+      <button class="btn-back" (click)="goBack()">
 
         <i class="bi bi-arrow-left"></i>
 
@@ -92,9 +82,7 @@
             {{ project.name }}
           </h1>
 
-          <span
-            class="status"
-            [ngClass]="getStatusClass(project.status)">
+          <span class="status" [ngClass]="getStatusClass(project.status)">
 
             {{ getStatusLabel(project.status) }}
 
@@ -153,9 +141,7 @@
 
         </div>
 
-        <div
-          *ngIf="project.manager"
-          class="user-info">
+        <div *ngIf="project.manager" class="user-info">
 
           <div class="avatar">
 
@@ -177,9 +163,7 @@
 
         </div>
 
-        <p
-          *ngIf="!project.manager"
-          class="empty">
+        <p *ngIf="!project.manager" class="empty">
 
           Aucun chef de projet affecté.
 
@@ -254,19 +238,15 @@
         </h2>
 
         <span class="member-count">
-          {{ project.members?.length || 0 }}
+          {{ project.members.length || 0 }}
         </span>
 
       </div>
 
 
-      <div
-        *ngIf="project.members?.length"
-        class="members-list">
+      <div *ngIf="project.members.length" class="members-list">
 
-        <div
-          class="member"
-          *ngFor="let member of project.members">
+        <div class="member" *ngFor="let member of project.members">
 
           <div class="avatar">
 
@@ -291,9 +271,7 @@
       </div>
 
 
-      <div
-        *ngIf="!project.members?.length"
-        class="empty-members">
+      <div *ngIf="!project.members.length" class="empty-members">
 
         <i class="bi bi-person-x"></i>
 
@@ -305,6 +283,195 @@
 
     </div>
 
+
+    <!-- ========================= -->
+    <!-- Tâches du projet -->
+    <!-- ========================= -->
+
+    <div class="card tasks-card">
+
+      <div class="tasks-header">
+
+        <div class="card-title">
+
+          <i class="bi bi-check2-square"></i>
+
+          <h2>
+            Tâches du projet
+          </h2>
+
+          <span class="member-count">
+            {{ tasks.length }}
+          </span>
+
+        </div>
+
+        <button class="btn-add-task" (click)="addTask()">
+
+          <i class="bi bi-plus-lg"></i>
+
+          Ajouter une tâche
+
+        </button>
+
+      </div>
+
+
+      <!-- Chargement -->
+
+      <div *ngIf="tasksLoading" class="tasks-loading">
+
+        <i class="bi bi-arrow-repeat"></i>
+
+        Chargement des tâches...
+
+      </div>
+
+
+      <!-- Erreur -->
+
+      <div *ngIf="!tasksLoading && tasksError" class="tasks-error">
+
+        <i class="bi bi-exclamation-triangle"></i>
+
+        {{ tasksError }}
+
+      </div>
+
+
+      <!-- Aucune tâche -->
+
+      <div *ngIf="
+      !tasksLoading &&
+      !tasksError &&
+      tasks.length === 0
+    " class="empty-tasks">
+
+        <i class="bi bi-check2-square"></i>
+
+        <h3>
+          Aucune tâche
+        </h3>
+
+        <p>
+          Aucune tâche n'a encore été créée pour ce projet.
+        </p>
+
+        <button class="btn-add-task" (click)="addTask()">
+
+          <i class="bi bi-plus-lg"></i>
+
+          Créer la première tâche
+
+        </button>
+
+      </div>
+
+
+      <!-- Liste des tâches -->
+
+      <div *ngIf="
+      !tasksLoading &&
+      !tasksError &&
+      tasks.length > 0
+    " class="tasks-list">
+
+        <div class="task-item" *ngFor="let task of tasks">
+
+          <!-- Icône -->
+
+          <div class="task-icon">
+
+            <i class="bi bi-check2"></i>
+
+          </div>
+
+
+          <!-- Informations -->
+
+          <div class="task-main">
+
+            <strong>
+              {{ task.title }}
+            </strong>
+
+            <span *ngIf="task.description">
+
+              {{ task.description }}
+
+            </span>
+
+            <small>
+
+              <i class="bi bi-calendar3"></i>
+
+              Échéance :
+              {{ task.dueDate | date:'dd/MM/yyyy' }}
+
+            </small>
+
+          </div>
+
+
+          <!-- Assigné -->
+
+          <div class="task-assigned">
+
+            <ng-container *ngIf="task.assignedTo; else notAssigned">
+
+              <div class="small-avatar">
+
+                {{ task.assignedTo.fullName
+                .charAt(0)
+                .toUpperCase() }}
+
+              </div>
+
+              <span>
+                {{ task.assignedTo.fullName }}
+              </span>
+
+            </ng-container>
+
+            <ng-template #notAssigned>
+
+              <span class="not-assigned">
+                Non assignée
+              </span>
+
+            </ng-template>
+
+          </div>
+
+
+          <!-- Priorité -->
+
+          <span class="task-priority" [ngClass]="
+          'priority-' +
+          task.priority.toLowerCase()
+        ">
+
+            {{ getTaskPriorityLabel(task.priority) }}
+
+          </span>
+
+
+          <!-- Statut -->
+
+          <span class="task-status" [ngClass]="
+          'status-' +
+          getTaskStatusClass(task.status)
+        ">
+
+            {{ getTaskStatusLabel(task.status) }}
+
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
 
     <!-- ========================= -->
     <!-- Progression -->
@@ -333,9 +500,7 @@
 
       <div class="progress-bar">
 
-        <div
-          class="progress-value"
-          [style.width.%]="project.progress || 0">
+        <div class="progress-value" [style.width.%]="project.progress || 0">
 
         </div>
 
@@ -364,9 +529,7 @@
 
     <div class="bottom-actions">
 
-      <button
-        class="btn-back"
-        (click)="goBack()">
+      <button class="btn-back" (click)="goBack()">
 
         <i class="bi bi-arrow-left"></i>
 
