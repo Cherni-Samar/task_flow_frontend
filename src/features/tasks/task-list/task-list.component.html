@@ -130,7 +130,7 @@
 
                             <i class="bi bi-folder"></i>
 
-                            {{ task.project?.name || 'Non affecté' }}
+                            {{ task.project.name || 'Non affecté' }}
 
                         </div>
 
@@ -189,8 +189,7 @@
                         <select class="status-select" [ngClass]="
                                 'status-' +
                                 task.status.toLowerCase()
-                            " [(ngModel)]="task.status" 
-                            (ngModelChange)="updateStatus(task, $event)">
+                            " [(ngModel)]="task.status" (ngModelChange)="updateStatus(task, $event)">
 
                             <option [value]="TaskStatus.TODO">
 

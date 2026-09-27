@@ -1,0 +1,303 @@
+<div class="task-form-page">
+
+  <!-- Retour -->
+  <div class="top-navigation">
+    <button
+      type="button"
+      class="btn-back"
+      (click)="cancel()"
+    >
+      <i class="bi bi-arrow-left"></i>
+      Retour au projet
+    </button>
+  </div>
+
+  <!-- Chargement -->
+  <div
+    *ngIf="loadingProject"
+    class="loading-state"
+  >
+    <i class="bi bi-arrow-repeat"></i>
+    <span>Chargement du projet...</span>
+  </div>
+
+  <!-- Erreur -->
+  <div
+    *ngIf="!loadingProject && errorMessage"
+    class="error-message"
+  >
+    <i class="bi bi-exclamation-triangle"></i>
+    {{ errorMessage }}
+  </div>
+
+  <!-- Formulaire -->
+  <div
+    *ngIf="!loadingProject && project"
+    class="form-container"
+  >
+
+    <!-- Header -->
+    <div class="form-header">
+
+      <div>
+        <div class="page-label">
+          <i class="bi bi-check2-square"></i>
+          NOUVELLE TÂCHE
+        </div>
+
+        <h1>Ajouter une tâche</h1>
+
+        <p>
+          Créez une nouvelle tâche pour le projet
+          <strong>{{ project.name }}</strong>
+        </p>
+      </div>
+
+      <div class="project-badge">
+        <i class="bi bi-folder2-open"></i>
+        {{ project.name }}
+      </div>
+
+    </div>
+
+    <!-- Error -->
+    <div
+      *ngIf="errorMessage"
+      class="form-error"
+    >
+      <i class="bi bi-exclamation-circle"></i>
+      {{ errorMessage }}
+    </div>
+
+    <!-- Form -->
+    <form
+      (ngSubmit)="createTask()"
+      class="task-form"
+    >
+
+      <!-- Informations principales -->
+      <div class="form-card">
+
+        <div class="card-title">
+          <i class="bi bi-info-circle"></i>
+          <h2>Informations de la tâche</h2>
+        </div>
+
+        <!-- Titre -->
+        <div class="form-group">
+
+          <label for="title">
+            Titre
+            <span class="required">*</span>
+          </label>
+
+          <input
+            id="title"
+            type="text"
+            name="title"
+            [(ngModel)]="task.title"
+            placeholder="Ex : Développer la page de connexion"
+            maxlength="255"
+            required
+          />
+
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+
+          <label for="description">
+            Description
+          </label>
+
+          <textarea
+            id="description"
+            name="description"
+            [(ngModel)]="task.description"
+            placeholder="Décrivez la tâche..."
+            rows="5"
+          ></textarea>
+
+        </div>
+
+      </div>
+
+      <!-- Configuration -->
+      <div class="form-card">
+
+        <div class="card-title">
+          <i class="bi bi-sliders"></i>
+          <h2>Configuration</h2>
+        </div>
+
+        <div class="form-grid">
+
+          <!-- Priorité -->
+          <div class="form-group">
+
+            <label for="priority">
+              Priorité
+            </label>
+
+            <select
+              id="priority"
+              name="priority"
+              [(ngModel)]="task.priority"
+            >
+
+              <option
+                [ngValue]="TaskPriority.LOW"
+              >
+                Faible
+              </option>
+
+              <option
+                [ngValue]="TaskPriority.MEDIUM"
+              >
+                Moyenne
+              </option>
+
+              <option
+                [ngValue]="TaskPriority.HIGH"
+              >
+                Élevée
+              </option>
+
+              <option
+                [ngValue]="TaskPriority.URGENT"
+              >
+                Urgente
+              </option>
+
+            </select>
+
+          </div>
+
+          <!-- Statut -->
+          <div class="form-group">
+
+            <label for="status">
+              Statut
+            </label>
+
+            <select
+              id="status"
+              name="status"
+              [(ngModel)]="task.status"
+            >
+
+              <option
+                [ngValue]="TaskStatus.TODO"
+              >
+                À faire
+              </option>
+
+              <option
+                [ngValue]="TaskStatus.IN_PROGRESS"
+              >
+                En cours
+              </option>
+
+              <option
+                [ngValue]="TaskStatus.COMPLETED"
+              >
+                Terminée
+              </option>
+
+              <option
+                [ngValue]="TaskStatus.OVERDUE"
+              >
+                En retard
+              </option>
+
+            </select>
+
+          </div>
+
+          <!-- Date -->
+          <div class="form-group">
+
+            <label for="dueDate">
+              Date d'échéance
+              <span class="required">*</span>
+            </label>
+
+            <input
+              id="dueDate"
+              type="date"
+              name="dueDate"
+              [(ngModel)]="task.dueDate"
+              required
+            />
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Projet -->
+      <div class="form-card project-card">
+
+        <div class="card-title">
+          <i class="bi bi-folder2"></i>
+          <h2>Projet</h2>
+        </div>
+
+        <div class="project-info">
+
+          <div class="project-icon">
+            <i class="bi bi-folder-fill"></i>
+          </div>
+
+          <div>
+            <strong>{{ project.name }}</strong>
+
+            <span>
+              Cette tâche sera automatiquement associée à ce projet.
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+
+        <button
+          type="button"
+          class="btn-cancel"
+          (click)="cancel()"
+          [disabled]="submitting"
+        >
+          Annuler
+        </button>
+
+        <button
+          type="submit"
+          class="btn-submit"
+          [disabled]="submitting || !task.title.trim() || !task.dueDate"
+        >
+
+          <i
+            *ngIf="!submitting"
+            class="bi bi-plus-lg"
+          ></i>
+
+          <i
+            *ngIf="submitting"
+            class="bi bi-arrow-repeat"
+          ></i>
+
+          {{ submitting ? 'Création...' : 'Créer la tâche' }}
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
