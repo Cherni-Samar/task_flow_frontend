@@ -403,6 +403,16 @@ export class ProjectFormComponent implements OnInit {
 
     }
 
+    get availableCollaborators(): User[] {
+        const selectedManagerId = Number(
+            this.projectForm.get('managerId')?.value
+        );
+
+        return this.collaborators.filter(
+            user => Number(user.id) !== selectedManagerId
+        );
+    }
+
     /**
      * Retourne uniquement les utilisateurs
      * ayant le rôle MANAGER.
@@ -422,27 +432,23 @@ export class ProjectFormComponent implements OnInit {
      * par la recherche.
      */
     get filteredCollaborators(): User[] {
+        const search = this.collaboratorSearch.trim().toLowerCase();
 
-        const search =
-            this.collaboratorSearch
-                .trim()
-                .toLowerCase();
+        const selectedManagerId = Number(
+            this.projectForm.get('managerId')?.value
+        );
 
-        // Ne rien afficher si aucune recherche
         if (!search) {
             return [];
         }
 
-        // Afficher uniquement les résultats de la recherche
         return this.collaborators.filter(
             collaborator =>
-                collaborator.fullName
-                    .toLowerCase()
-                    .includes(search)
-                ||
-                collaborator.email
-                    .toLowerCase()
-                    .includes(search)
+                Number(collaborator.id) !== selectedManagerId &&
+                (
+                    collaborator.fullName.toLowerCase().includes(search) ||
+                    collaborator.email.toLowerCase().includes(search)
+                )
         );
     }
 
