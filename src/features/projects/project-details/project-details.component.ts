@@ -6,6 +6,8 @@ import { ProjectService } from '../project.service';
 import { Project } from '../../../shared/models/project.model';
 import { Task, TaskStatus, TaskPriority } from '../../../shared/models/task.model';
 import { TaskService } from '../../tasks/task.service';
+import { UserService } from '../../users/user.service';
+import { User } from '../../../shared/models/user.model';
 
 @Component({
     selector: 'app-project-details',
@@ -31,18 +33,95 @@ export class ProjectDetailsComponent implements OnInit {
     TaskStatus = TaskStatus;
     TaskPriority = TaskPriority;
 
+    currentUser!: User;
+
+    isAdmin = false;
+    isManager = false;
+
+    canCreateTask = false;
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private projectService: ProjectService,
         private taskService: TaskService,
+        private userService: UserService,
         private cd: ChangeDetectorRef
     ) { }
 
     ngOnInit(): void {
+        this.loadCurrentUser();
         this.loadProject();
     }
 
+    /**
+     * Charger l'utilisateur courant et ses rôles
+     */
+    loadCurrentUser(): void {
+
+        this.userService.getCurrentUser().subscribe({
+
+            next: (user: User) => {
+
+                console.log(
+                    '👤 Utilisateur connecté :',
+                    user
+                );
+
+                this.currentUser = user;
+
+                this.isAdmin =
+                    user.roles?.some(
+                        role => role.name === 'ADMIN'
+                    ) ?? false;
+
+                this.isManager =
+                    user.roles?.some(
+                        role => role.name === 'MANAGER'
+                    ) ?? false;
+
+                this.checkCanCreateTask();
+
+                this.cd.detectChanges();
+            },
+
+            error: (error) => {
+
+                console.error(
+                    '❌ Erreur récupération utilisateur connecté :',
+                    error
+                );
+
+            }
+
+        });
+    }
+
+    checkCanCreateTask(): void {
+
+        if (!this.project || !this.currentUser) {
+            this.canCreateTask = false;
+            return;
+        }
+
+        // ADMIN → peut créer dans tous les projets
+        if (this.isAdmin) {
+            this.canCreateTask = true;
+            return;
+        }
+
+        // MANAGER → seulement dans ses propres projets
+        if (this.isManager) {
+
+            this.canCreateTask =
+                this.project.manager?.id === this.currentUser.id;
+
+            return;
+        }
+
+        // COLLABORATOR → impossible
+        this.canCreateTask = false;
+    }
     /**
      * Charger le projet à partir de son ID
      */
@@ -80,7 +159,7 @@ export class ProjectDetailsComponent implements OnInit {
                         data.status
                     )
                 };
-
+                this.checkCanCreateTask();
                 this.loadTasks(data.id!);
 
                 this.loading = false;
