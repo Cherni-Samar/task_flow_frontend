@@ -1,0 +1,432 @@
+.task-page {
+  padding: 5px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.page-header p {
+  margin: 6px 0 0;
+  color: #64748b;
+}
+
+
+/* =========================
+   CREATE BUTTON
+========================= */
+
+.btn-create {
+  border: none;
+  background: linear-gradient(
+    90deg,
+    #1e3a8a,
+    #2563eb
+  );
+
+  color: white;
+
+  padding: 11px 18px;
+
+  border-radius: 8px;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  transition: 0.2s;
+}
+
+.btn-create:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+
+/* =========================
+   TABLE CARD
+========================= */
+
+.task-card {
+  background: white;
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.08);
+
+  overflow-x: auto;
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: #f8fafc;
+}
+
+th {
+  padding: 16px;
+
+  text-align: left;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  color: #64748b;
+
+  border-bottom: 1px solid #e2e8f0;
+
+  white-space: nowrap;
+}
+
+td {
+  padding: 15px 16px;
+
+  border-bottom: 1px solid #f1f5f9;
+
+  vertical-align: middle;
+}
+
+tbody tr:hover {
+  background: #f8fafc;
+}
+
+
+/* =========================
+   TASK
+========================= */
+
+.task-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  max-width: 250px;
+}
+
+.task-info strong {
+  color: #1e293b;
+  font-size: 14px;
+}
+
+.task-info span {
+  color: #94a3b8;
+
+  font-size: 12px;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+/* =========================
+   PROJECT
+========================= */
+
+.project-info {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  color: #475569;
+
+  font-size: 13px;
+}
+
+.project-info i {
+  color: #2563eb;
+}
+
+
+/* =========================
+   USER
+========================= */
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 13px;
+
+  color: #475569;
+}
+
+.user-avatar {
+  width: 30px;
+  height: 30px;
+
+  border-radius: 50%;
+
+  background: #dbeafe;
+
+  color: #1d4ed8;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 600;
+
+  font-size: 12px;
+}
+
+.not-assigned {
+  color: #94a3b8;
+
+  font-size: 13px;
+
+  font-style: italic;
+}
+
+
+/* =========================
+   PRIORITY
+========================= */
+
+.priority {
+  display: inline-block;
+
+  padding: 5px 9px;
+
+  border-radius: 6px;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+.priority-low {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.priority-medium {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.priority-high {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.priority-urgent {
+  background: #fecaca;
+  color: #991b1b;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.status-select {
+  border: none;
+
+  padding: 6px 9px;
+
+  border-radius: 6px;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  outline: none;
+}
+
+.status-todo {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.status-in_progress {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status-completed {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-overdue {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+
+/* =========================
+   DATE
+========================= */
+
+.due-date {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  color: #64748b;
+
+  font-size: 13px;
+
+  white-space: nowrap;
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.actions {
+  display: flex;
+  gap: 7px;
+}
+
+.btn-action {
+  width: 32px;
+  height: 32px;
+
+  border: none;
+
+  border-radius: 6px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.btn-edit {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.btn-edit:hover {
+  background: #dbeafe;
+}
+
+.btn-delete {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.btn-delete:hover {
+  background: #fee2e2;
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+.loading {
+  text-align: center;
+
+  padding: 60px;
+
+  color: #64748b;
+}
+
+.loading i {
+  margin-right: 8px;
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+.error-message {
+  padding: 12px 16px;
+
+  margin-bottom: 20px;
+
+  background: #fef2f2;
+
+  color: #b91c1c;
+
+  border-radius: 8px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty-state {
+  background: white;
+
+  border-radius: 12px;
+
+  padding: 60px 20px;
+
+  text-align: center;
+
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.empty-state > i {
+  font-size: 45px;
+
+  color: #94a3b8;
+}
+
+.empty-state h3 {
+  margin: 15px 0 5px;
+
+  color: #1e293b;
+}
+
+.empty-state p {
+  color: #64748b;
+
+  margin-bottom: 20px;
+}

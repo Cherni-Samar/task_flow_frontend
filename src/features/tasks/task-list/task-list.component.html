@@ -1,0 +1,273 @@
+<div class="task-page">
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+            <h1>Gestion des tâches</h1>
+
+            <p>
+                Gérez les tâches et leur avancement
+            </p>
+        </div>
+
+        <button class="btn-create" routerLink="/tasks/create">
+
+            <i class="bi bi-plus-lg"></i>
+
+            Nouvelle tâche
+
+        </button>
+
+    </div>
+
+
+    <!-- ERROR -->
+
+    <div class="error-message" *ngIf="errorMessage">
+
+        <i class="bi bi-exclamation-triangle"></i>
+
+        {{ errorMessage }}
+
+    </div>
+
+
+    <!-- LOADING -->
+
+    <div class="loading" *ngIf="loading">
+
+        <i class="bi bi-arrow-repeat"></i>
+
+        Chargement des tâches...
+
+    </div>
+
+
+    <!-- EMPTY -->
+
+    <div class="empty-state" *ngIf="!loading && tasks.length === 0">
+
+        <i class="bi bi-check2-square"></i>
+
+        <h3>Aucune tâche</h3>
+
+        <p>
+            Aucune tâche n'a encore été créée.
+        </p>
+
+        <button class="btn-create" routerLink="/tasks/new">
+
+            <i class="bi bi-plus-lg"></i>
+
+            Créer une tâche
+
+        </button>
+
+    </div>
+
+
+    <!-- TASK TABLE -->
+
+    <div class="task-card" *ngIf="!loading && tasks.length > 0">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Tâche</th>
+
+                    <th>Projet</th>
+
+                    <th>Assignée à</th>
+
+                    <th>Priorité</th>
+
+                    <th>Statut</th>
+
+                    <th>Échéance</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                <tr *ngFor="let task of tasks">
+
+                    <!-- TASK -->
+
+                    <td>
+
+                        <div class="task-info">
+
+                            <strong>
+                                {{ task.title }}
+                            </strong>
+
+                            <span *ngIf="task.description">
+
+                                {{ task.description }}
+
+                            </span>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- PROJECT -->
+
+                    <td>
+
+                        <div class="project-info">
+
+                            <i class="bi bi-folder"></i>
+
+                            {{ task.project?.name || 'Non affecté' }}
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- ASSIGNED USER -->
+
+                    <td>
+
+                        <div class="user-info" *ngIf="task.assignedTo">
+
+                            <div class="user-avatar">
+
+                                {{ task.assignedTo.fullName
+                                .charAt(0)
+                                .toUpperCase() }}
+
+                            </div>
+
+                            <span>
+                                {{ task.assignedTo.fullName }}
+                            </span>
+
+                        </div>
+
+                        <span class="not-assigned" *ngIf="!task.assignedTo">
+
+                            Non assignée
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- PRIORITY -->
+
+                    <td>
+
+                        <span class="priority" [ngClass]="
+                'priority-' +
+                task.priority.toLowerCase()
+              ">
+
+                            {{ getPriorityLabel(task.priority) }}
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- STATUS -->
+
+                    <td>
+
+                        <select class="status-select" [ngClass]="
+                                'status-' +
+                                task.status.toLowerCase()
+                            " [(ngModel)]="task.status" 
+                            (ngModelChange)="updateStatus(task, $event)">
+
+                            <option [value]="TaskStatus.TODO">
+
+                                À faire
+
+                            </option>
+
+                            <option [value]="TaskStatus.IN_PROGRESS">
+
+                                En cours
+
+                            </option>
+
+                            <option [value]="TaskStatus.COMPLETED">
+
+                                Terminée
+
+                            </option>
+
+                            <option [value]="TaskStatus.OVERDUE">
+
+                                En retard
+
+                            </option>
+
+                        </select>
+
+                    </td>
+
+
+                    <!-- DUE DATE -->
+
+                    <td>
+
+                        <span class="due-date">
+
+                            <i class="bi bi-calendar3"></i>
+
+                            {{ formatDate(task.dueDate) }}
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- ACTIONS -->
+
+                    <td>
+
+                        <div class="actions">
+
+                            <button class="btn-action btn-edit" [routerLink]="[
+                  '/tasks/edit',
+                  task.id
+                ]" title="Modifier">
+
+                                <i class="bi bi-pencil"></i>
+
+                            </button>
+
+
+                            <button class="btn-action btn-delete" (click)="deleteTask(task)" title="Supprimer">
+
+                                <i class="bi bi-trash"></i>
+
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
