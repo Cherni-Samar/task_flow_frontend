@@ -3,6 +3,7 @@ import { UserListComponent } from '../features/users/user-list/user-list.compone
 import { LayoutComponent } from '../layout/layout.component';
 import { LoginComponent } from '../features/auth/login/login.component';
 import { authGuard, loginGuard } from '../core/guards/auth.guard';
+import { TaskListComponent } from '../features/tasks/task-list/task-list.component';
 
 export const routes: Routes = [
   {
@@ -74,7 +75,11 @@ export const routes: Routes = [
           import('../features/projects/project-details/project-details.component')
             .then(m => m.ProjectDetailsComponent)
       },
-      
+      {
+        path: 'tasks',
+        component: TaskListComponent
+      }
+
 
 
     ]
